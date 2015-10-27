@@ -12,8 +12,8 @@ public class Sorry extends JFrame implements Runnable {
     static final int YBORDER = 20;
     static final int YTITLE = 30;
     static final int WINDOW_BORDER = 8;
-    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 495;
-    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 525;
+    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 496;
+    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 528;
     boolean animateFirstTime = true;
     int xsize = -1;
     int ysize = -1;
@@ -22,10 +22,8 @@ public class Sorry extends JFrame implements Runnable {
 
     final int numRows = 16;
     final int numColumns = 16;
-
-    final int EMPTY = 0;
     
-    int board[][];
+    Tile board[][];
 
     
     static Sorry frame1;
@@ -152,20 +150,35 @@ public class Sorry extends JFrame implements Runnable {
         }
 
         g.setColor(Color.black);
-//horizontal lines
+
+        for (int zrow = 0;zrow < numRows;zrow++)
+        {
+            for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
+            {
+                if(board[zrow][zcolumn] != null && board[zrow][zcolumn].getType()==0)
+                {
+                    g.setColor(Color.LIGHT_GRAY);
+
+                    g.fillRect(getX(0)+zcolumn*getWidth2()/numColumns,
+                    getY(0)+zrow*getHeight2()/numRows,
+                    getWidth2()/numColumns,
+                    getHeight2()/numRows);
+                }
+            }
+        }
+        g.setColor(Color.BLACK);
+        //horizontal lines
         for (int zi=1;zi<numRows;zi++)
         {
             g.drawLine(getX(0) ,getY(0)+zi*getHeight2()/numRows ,
             getX(getWidth2()) ,getY(0)+zi*getHeight2()/numRows );
         }
-//vertical lines
+        //vertical lines
         for (int zi=1;zi<numColumns;zi++)
         {
             g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
             getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
         }
-
-
         gOld.drawImage(image, 0, 0, null);
     }
 
@@ -186,14 +199,7 @@ public class Sorry extends JFrame implements Runnable {
     }
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
-        board = new int[numRows][numColumns];
-        for (int zrow = 0;zrow < numRows;zrow++)
-        {
-            for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
-            {
-                board[zrow][zcolumn] = EMPTY;
-            }
-        }
+        
         
     }
 /////////////////////////////////////////////////////////////////////////
@@ -205,7 +211,8 @@ public class Sorry extends JFrame implements Runnable {
                 xsize = getSize().width;
                 ysize = getSize().height;
             }
-
+            board = new Tile [numRows][numColumns];
+            setup();
             reset();
         }
                     
@@ -224,6 +231,17 @@ public class Sorry extends JFrame implements Runnable {
             relaxer.stop();
         }
         relaxer = null;
+    }
+/////////////////////////////////////////////////////////////////////////
+    public void setup(){
+        for (int zrow = 0;zrow < numRows;zrow++)
+        {
+            for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
+            {
+                if(zrow==0 || zrow==numRows-1 || zcolumn==0 || zcolumn==numColumns-1)
+                    board[zrow][zcolumn]=new Tile(0);
+            }
+        }
     }
 /////////////////////////////////////////////////////////////////////////
     public int getX(int x) {
