@@ -242,6 +242,14 @@ public class Sorry extends JFrame implements Runnable {
                     board[zrow][zcolumn]=new Tile(0);
             }
         }
+        board[0][1]=new Tile(1);
+        board[0][9]=new Tile(1);
+        board[1][15]=new Tile(1);
+        board[9][15]=new Tile(1);
+        board[15][14]=new Tile(1);
+        board[15][6]=new Tile(1);
+        board[6][0]=new Tile(1);
+        board[14][0]=new Tile(1);
     }
 /////////////////////////////////////////////////////////////////////////
     public int getX(int x) {
