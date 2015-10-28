@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 public class Card {
     static final int totalCards=45;
-    public static ArrayList<Card> Cards = new ArrayList<Card>();
+    static ArrayList<Card> Cards = new ArrayList<Card>();
     private int type;
     Card(int _type)
     {
@@ -17,7 +17,7 @@ public class Card {
         }
         for(int i=2;i<12;i++)
         {
-            for(int i1=0;i<4;i++)
+            for(int i1=0;i1<4;i1++)
             {
                 Cards.add(new Card(i));
             }
@@ -33,5 +33,9 @@ public class Card {
     public int getType()
     {
         return(type);
+    }
+    public static boolean isEmpty()
+    {
+        return(Cards.isEmpty());
     }
 }

@@ -44,8 +44,9 @@ public class Sorry extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
-                    
-                    System.out.println(Card.Cards.size());
+                    System.out.println(Card.TakeCard().getType());
+                    if(Card.isEmpty())
+                        Card.resetDeck();
                     
                 }
                 if (e.BUTTON3 == e.getButton()) {
