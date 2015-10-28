@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 public class Card {
     static final int totalCards=45;
-    static ArrayList<Card> Cards = new ArrayList<Card>();
+    public static ArrayList<Card> Cards = new ArrayList<Card>();
     private int type;
     Card(int _type)
     {
@@ -13,9 +13,9 @@ public class Card {
     {
         for(int i=0;i<5;i++)
         {
-            Cards.add(new Card(0));
+            Cards.add(new Card(1));
         }
-        for(int i=1;i<11;i++)
+        for(int i=2;i<12;i++)
         {
             for(int i1=0;i<4;i++)
             {
@@ -29,5 +29,9 @@ public class Card {
         Card card=Cards.get(0);
         Cards.remove(0);
         return(card);
+    }
+    public int getType()
+    {
+        return(type);
     }
 }

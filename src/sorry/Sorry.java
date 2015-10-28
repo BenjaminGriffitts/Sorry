@@ -23,9 +23,14 @@ public class Sorry extends JFrame implements Runnable {
     final int numRows = 16;
     final int numColumns = 16;
     
-    Tile board[][];
-
+    enum Owner{Player1, Player2, Player3, Player4};
+    Owner currentPlayer;
     
+    Tile board[][];
+    int SlidersCol[]={1,9,15,15,14,6 ,0,0};
+    int SlidersRow[]={0,0,1 ,9 ,15,15,6,14};
+    
+
     static Sorry frame1;
     public static void main(String[] args) {
         frame1 = new Sorry();
@@ -39,7 +44,9 @@ public class Sorry extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
-                    //left button
+                    
+                    System.out.println(Card.Cards.size());
+                    
                 }
                 if (e.BUTTON3 == e.getButton()) {
                     //right button
@@ -199,7 +206,7 @@ public class Sorry extends JFrame implements Runnable {
     }
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
-        
+        currentPlayer=Owner.Player1;
         
     }
 /////////////////////////////////////////////////////////////////////////
@@ -212,6 +219,7 @@ public class Sorry extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             board = new Tile [numRows][numColumns];
+            Card.resetDeck();
             setup();
             reset();
         }
@@ -242,14 +250,7 @@ public class Sorry extends JFrame implements Runnable {
                     board[zrow][zcolumn]=new Tile(0);
             }
         }
-        board[0][1]=new Tile(1);
-        board[0][9]=new Tile(1);
-        board[1][15]=new Tile(1);
-        board[9][15]=new Tile(1);
-        board[15][14]=new Tile(1);
-        board[15][6]=new Tile(1);
-        board[6][0]=new Tile(1);
-        board[14][0]=new Tile(1);
+        
     }
 /////////////////////////////////////////////////////////////////////////
     public int getX(int x) {
