@@ -29,14 +29,17 @@ public class Sorry extends JFrame implements Runnable {
     Tile board[][];
     int SlidersCol[]={1,9,15,15,14,6 ,0,0};
     int SlidersRow[]={0,0,1 ,9 ,15,15,6,14};
-    
+    static Menu gui=new Menu();
+    static boolean GameStart=false;
 
     static Sorry frame1;
     public static void main(String[] args) {
         frame1 = new Sorry();
         frame1.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame1.setVisible(true);
+        frame1.setLocationRelativeTo(null);
+        gui.setLocationRelativeTo(null);
+        gui.setVisible(true);
     }
 
     public Sorry() {
@@ -251,6 +254,14 @@ public class Sorry extends JFrame implements Runnable {
                     board[zrow][zcolumn]=new Tile(0);
             }
         }
+        for(int i=0;i<SlidersRow.length;i++)
+        {
+            board[SlidersRow[i]][SlidersCol[i]]=new Tile(1);
+        }
+        
+    }
+    public void setupPiece()
+    {
         
     }
 /////////////////////////////////////////////////////////////////////////
