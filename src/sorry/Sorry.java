@@ -12,23 +12,24 @@ public class Sorry extends JFrame implements Runnable {
     static final int YBORDER = 20;
     static final int YTITLE = 30;
     static final int WINDOW_BORDER = 8;
-    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 496;
-    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 528;
+    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 526;
+    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 526;
     boolean animateFirstTime = true;
     int xsize = -1;
     int ysize = -1;
     Image image;
     Graphics2D g;
+    Image sorryBoard;
 
-    final int numRows = 16;
-    final int numColumns = 16;
+    final int numRows = 15;
+    final int numColumns = 15;
     
     enum Owner{Player1, Player2, Player3, Player4};
     Owner currentPlayer;
     
     Tile board[][];
-    int SlidersCol[]={1,9,15,15,14,6 ,0,0};
-    int SlidersRow[]={0,0,1 ,9 ,15,15,6,14};
+    int SlidersRow[]={0,0,1           ,9           ,numRows-1   ,numRows-1,5,numRows-2};
+    int SlidersCol[]={1,9,numColumns-1,numColumns-1,numColumns-2,5        ,0,0};
     static Menu gui=new Menu();
     static boolean GameStart=false;
 
@@ -159,24 +160,28 @@ public class Sorry extends JFrame implements Runnable {
             gOld.drawImage(image, 0, 0, null);
             return;
         }
+        
+        g.drawImage(sorryBoard,getX(0),getY(0),getWidth2(),getHeight2(),this);
 
         g.setColor(Color.black);
 
-        for (int zrow = 0;zrow < numRows;zrow++)
-        {
-            for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
-            {
-                if(board[zrow][zcolumn] != null && board[zrow][zcolumn].getType()==0)
-                {
-                    g.setColor(Color.LIGHT_GRAY);
-
-                    g.fillRect(getX(0)+zcolumn*getWidth2()/numColumns,
-                    getY(0)+zrow*getHeight2()/numRows,
-                    getWidth2()/numColumns,
-                    getHeight2()/numRows);
-                }
-            }
-        }
+//        for (int zrow = 0;zrow < numRows;zrow++)
+//        {
+//            for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
+//            {
+//                if(board[zrow][zcolumn] != null && board[zrow][zcolumn].getType()==1)
+//                {
+//                    g.setColor(Color.WHITE);
+//                    g.fillRect(getX(0)+zcolumn*getWidth2()/numColumns,
+//                    getY(0)+zrow*getHeight2()/numRows,
+//                    getWidth2()/numColumns,
+//                    getHeight2()/numRows);
+//                }
+//            }
+//        }
+        
+        Piece.draw(g,getX(0),getY(0),getHeight2()/numRows);
+        
         g.setColor(Color.BLACK);
         //horizontal lines
         for (int zi=1;zi<numRows;zi++)
@@ -223,8 +228,10 @@ public class Sorry extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             board = new Tile [numRows][numColumns];
+            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_Board.jpg");
             Card.resetDeck();
             setup();
+            setupPiece();
             reset();
         }
                     
@@ -262,7 +269,20 @@ public class Sorry extends JFrame implements Runnable {
     }
     public void setupPiece()
     {
-        
+        for(int i=0;i<4;i++)
+        {
+            for(int i1=0;i1<4;i1++)
+            {
+                if(i==0)
+                    new Piece(4,1,Owner.Player1);
+                if(i==1)
+                    new Piece(numColumns-2,4,Owner.Player2);
+                if(i==2)
+                    new Piece(numColumns-5,numRows-2,Owner.Player3);
+                if(i==3)
+                    new Piece(1,numRows-5,Owner.Player4);
+            }
+        }
     }
 /////////////////////////////////////////////////////////////////////////
     public int getX(int x) {
