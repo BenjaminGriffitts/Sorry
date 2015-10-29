@@ -34,5 +34,15 @@ public class Piece {
             g.fillOval(x+i.Column*diameter, y+i.Row*diameter, diameter, diameter);
         }
     }
+    static public Piece isPieceThere(int row, int column)
+    {
+        for(Piece i: Pieces)
+        {
+            if(i.Row==row && i.Column==column)
+                return(i);
+                
+        }
+        return(null);
+    }
 
 }

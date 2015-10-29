@@ -1,6 +1,6 @@
 package sorry;
 
-
+import Tile.*;
 import java.io.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -25,6 +25,8 @@ public class Sorry extends JFrame implements Runnable {
     final int numColumns = 15;
     
     enum Owner{Player1, Player2, Player3, Player4};
+    boolean MoveFinished; //if true next click is drawing a card
+    int currentCardType;
     Owner currentPlayer;
     
     Tile board[][];
@@ -48,9 +50,27 @@ public class Sorry extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
-                    System.out.println(Card.TakeCard().getType());
+                    int xpos= e.getX()-getX(0);
+                    int ypos= e.getY()-getY(0);
+                    
+                    int row=ypos/(getHeight2()/numRows);
+                    int column=xpos/(getWidth2()/numColumns);
+                    
+                    if(MoveFinished)
+                    {
+                        currentCardType=Card.TakeCard().getType();
+                        System.out.println(currentCardType);
+                        MoveFinished=!MoveFinished;
+                    }
+                    if(!MoveFinished)
+                    {
+                        
+                        
+
+                    }
                     if(Card.isEmpty())
                         Card.resetDeck();
+                    
                     
                 }
                 if (e.BUTTON3 == e.getButton()) {
@@ -258,7 +278,7 @@ public class Sorry extends JFrame implements Runnable {
             for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
             {
                 if(zrow==0 || zrow==numRows-1 || zcolumn==0 || zcolumn==numColumns-1)
-                    board[zrow][zcolumn]=new Tile(0);
+                    board[zrow][zcolumn]= new Tile(0);
             }
         }
         for(int i=0;i<SlidersRow.length;i++)
@@ -271,8 +291,8 @@ public class Sorry extends JFrame implements Runnable {
     {
         for(int i=0;i<4;i++)
         {
-            for(int i1=0;i1<4;i1++)
-            {
+//            for(int i1=0;i1<4;i1++)
+//            {
                 if(i==0)
                     new Piece(4,1,Owner.Player1);
                 if(i==1)
@@ -281,7 +301,7 @@ public class Sorry extends JFrame implements Runnable {
                     new Piece(numColumns-5,numRows-2,Owner.Player3);
                 if(i==3)
                     new Piece(1,numRows-5,Owner.Player4);
-            }
+//            }
         }
     }
 /////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,7 @@
-package sorry;
-
+package Tile;
 public class Tile {
     private int type;
-    Tile(int _type)
+    public Tile(int _type)
     {
         type=_type;
     }
