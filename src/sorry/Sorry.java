@@ -62,10 +62,16 @@ public class Sorry extends JFrame implements Runnable {
                         System.out.println(currentCardType);
                         MoveFinished=!MoveFinished;
                     }
-                    if(!MoveFinished)
+                    else if(!MoveFinished)
                     {
-                        
-                        
+                        Piece p=Piece.isPieceThere(row,column);
+                        if(p!=null && p.getTeam()==currentPlayer)
+                        {
+                            p.move(currentCardType,numRows,numColumns);
+                            
+                            //changeTeam();
+                            MoveFinished=!MoveFinished;
+                        }
 
                     }
                     if(Card.isEmpty())
@@ -236,6 +242,7 @@ public class Sorry extends JFrame implements Runnable {
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
         currentPlayer=Owner.Player1;
+        MoveFinished=true;
         
     }
 /////////////////////////////////////////////////////////////////////////
@@ -303,6 +310,17 @@ public class Sorry extends JFrame implements Runnable {
                     new Piece(1,numRows-5,Owner.Player4);
 //            }
         }
+    }
+    public void changeTeam()
+    {
+        if(currentPlayer==Owner.Player1)
+            currentPlayer=Owner.Player2;
+        else if(currentPlayer==Owner.Player2)
+            currentPlayer=Owner.Player3;
+        else if(currentPlayer==Owner.Player3)
+            currentPlayer=Owner.Player4;
+        else if(currentPlayer==Owner.Player4)
+            currentPlayer=Owner.Player1;
     }
 /////////////////////////////////////////////////////////////////////////
     public int getX(int x) {

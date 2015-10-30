@@ -45,4 +45,52 @@ public class Piece {
         return(null);
     }
 
+    public Sorry.Owner getTeam() {
+        return team;
+    }
+    
+    public void move(int c,int nRows,int nCol)
+    {
+        if(c==1)
+        {
+            if(Row==startRow && Column==startColumn)
+            {
+                if(team==Sorry.Owner.Player1)
+                    Row-=1;
+                else if(team==Sorry.Owner.Player2)
+                    Column+=1;
+                else if(team==Sorry.Owner.Player3)
+                    Row+=1;
+                else
+                    Column-=1;
+            }
+            else
+            {
+                moveDir(nRows,nCol,1);
+            }
+        }
+    }
+    public void moveDir(int nRows, int nCol,int Distance)
+    {
+        for(int i=0; i<Distance; i++)
+        {
+            if(Row==0 && Column<nCol-1)
+            {
+                Column+=1;
+            }
+            else if(Column==nCol-1 && Row<nRows-1)
+            {
+                Row+=1;
+            }
+            else if(Column>0 && Row==nRows-1)
+            {
+                Column-=1;
+            }
+            else if(Column==0 && Row>0)
+            {
+                Row-=1;
+            }
+        }
+    }
+
 }
