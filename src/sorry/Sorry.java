@@ -21,8 +21,8 @@ public class Sorry extends JFrame implements Runnable {
     Graphics2D g;
     Image sorryBoard;
 
-    final int numRows = 15;
-    final int numColumns = 15;
+    final int numRows = 16;
+    final int numColumns = 16;
     
     enum Owner{Player1, Player2, Player3, Player4};
     boolean MoveFinished; //if true next click is drawing a card
