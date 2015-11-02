@@ -26,7 +26,7 @@ public class Sorry extends JFrame implements Runnable {
     
     enum Owner{Player1, Player2, Player3, Player4};
     boolean MoveFinished; //if true next click is drawing a card
-    int currentCardType;
+    Card currentCardType;
     Owner currentPlayer;
     
     Tile board[][];
@@ -58,8 +58,8 @@ public class Sorry extends JFrame implements Runnable {
                     
                     if(MoveFinished)
                     {
-                        currentCardType=Card.TakeCard().getType();
-                        System.out.println(currentCardType);
+                        currentCardType=Card.TakeCard();
+                        System.out.println(currentCardType.getType());
                         MoveFinished=!MoveFinished;
                     }
                     else if(!MoveFinished)
@@ -67,15 +67,18 @@ public class Sorry extends JFrame implements Runnable {
                         Piece p=Piece.isPieceThere(row,column);
                         if(p!=null && p.getTeam()==currentPlayer)
                         {
-                            p.move(currentCardType,numRows,numColumns);
                             
-                            //changeTeam();
+                            p.move(currentCardType,numRows,numColumns);
+                            if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
+                                changeTeam();
+                            
                             MoveFinished=!MoveFinished;
                         }
 
                     }
                     if(Card.isEmpty())
                         Card.resetDeck();
+                    
                     
                     
                 }
@@ -190,36 +193,26 @@ public class Sorry extends JFrame implements Runnable {
         g.drawImage(sorryBoard,getX(0),getY(0),getWidth2(),getHeight2(),this);
 
         g.setColor(Color.black);
-
-//        for (int zrow = 0;zrow < numRows;zrow++)
-//        {
-//            for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
-//            {
-//                if(board[zrow][zcolumn] != null && board[zrow][zcolumn].getType()==1)
-//                {
-//                    g.setColor(Color.WHITE);
-//                    g.fillRect(getX(0)+zcolumn*getWidth2()/numColumns,
-//                    getY(0)+zrow*getHeight2()/numRows,
-//                    getWidth2()/numColumns,
-//                    getHeight2()/numRows);
-//                }
-//            }
-//        }
         
-        Piece.draw(g,getX(0),getY(0),getHeight2()/numRows);
+        
+        Piece.draw(g,getX(0),getY(0),getHeight2()/numRows,getWidth2()/numColumns);
         
         g.setColor(Color.BLACK);
-        //horizontal lines
-        for (int zi=1;zi<numRows;zi++)
+//        //horizontal lines
+//        for (int zi=1;zi<numRows;zi++)
+//        {
+//            g.drawLine(getX(0) ,getY(0)+zi*getHeight2()/numRows ,
+//            getX(getWidth2()) ,getY(0)+zi*getHeight2()/numRows );
+//        }
+//        //vertical lines
+//        for (int zi=1;zi<numColumns;zi++)
+//        {
+//            g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
+//            getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
+//        }
+        if(currentCardType!=null)
         {
-            g.drawLine(getX(0) ,getY(0)+zi*getHeight2()/numRows ,
-            getX(getWidth2()) ,getY(0)+zi*getHeight2()/numRows );
-        }
-        //vertical lines
-        for (int zi=1;zi<numColumns;zi++)
-        {
-            g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
-            getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
+            currentCardType.draw(g, getX(0)+6*getWidth2()/numColumns, getY(0)+5*getHeight2()/numRows,3*getWidth2()/numColumns,5*getHeight2()/numRows);
         }
         gOld.drawImage(image, 0, 0, null);
     }
@@ -243,6 +236,7 @@ public class Sorry extends JFrame implements Runnable {
     public void reset() {
         currentPlayer=Owner.Player1;
         MoveFinished=true;
+        currentCardType=null;
         
     }
 /////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 package sorry;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.awt.*;
 public class Card {
     static final int totalCards=45;
     static ArrayList<Card> Cards = new ArrayList<Card>();
@@ -22,7 +23,12 @@ public class Card {
         {
             for(int i1=0;i1<4;i1++)
             {
-                Cards.add(new Card(i));
+                if(i>=8)
+                    Cards.add(new Card(i+2));
+                else if(i>=6)
+                    Cards.add(new Card(i+1));
+                else
+                    Cards.add(new Card(i));
             }
         }
         Collections.shuffle(Cards);
@@ -45,26 +51,39 @@ public class Card {
     {
         if(type==1)
             cardFunc=specFunc.none;
-        if(type==2)
+        else if(type==2)
             cardFunc=specFunc.drawAgain;
-        if(type==3)
+        else if(type==3)
             cardFunc=specFunc.none;
-        if(type==4)
+        else if(type==4)
             cardFunc=specFunc.backwards;
-        if(type==5)
+        else if(type==5)
             cardFunc=specFunc.none;
-        if(type==6) //6 is 7
+        else if(type==7) 
             cardFunc=specFunc.split;
-        if(type==7) //7 is 8
+        else if(type==8) 
             cardFunc=specFunc.none;
-        if(type==8) //8 is 10
+        else if(type==10) 
             cardFunc=specFunc.choice;
-        if(type==9) //9 is 11
+        else if(type==11) 
             cardFunc=specFunc.swap;
-        if(type==10) //10 is 12
+        else if(type==12) 
             cardFunc=specFunc.none;
-        if(type==11) //11 is sorry
+        else if(type==13) 
             cardFunc=specFunc.sorry;
-        
     }
+
+    public specFunc getCardFunc() {
+        return cardFunc;
+    }
+    public void draw(Graphics2D g,int x, int y, int width, int height) {
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.BLACK);
+        g.drawRect(x, y, width, height);
+    }
+//    public String toString()
+//    {
+//        
+//    }
 }

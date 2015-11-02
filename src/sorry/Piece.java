@@ -18,7 +18,7 @@ public class Piece {
         startRow = Row;
         Pieces.add(this);
     }
-    static public void draw(Graphics2D g,int x, int y,int diameter)
+    static public void draw(Graphics2D g,int x, int y,int height,int width)
     {
         
         for(Piece i: Pieces)
@@ -31,7 +31,7 @@ public class Piece {
                 g.setColor(Color.GREEN);
             else
                 g.setColor(Color.RED);
-            g.fillOval(x+i.Column*diameter, y+i.Row*diameter, diameter, diameter);
+            g.fillOval(x+i.Column*width, y+i.Row*height, width, height);
         }
     }
     static public Piece isPieceThere(int row, int column)
@@ -49,46 +49,85 @@ public class Piece {
         return team;
     }
     
-    public void move(int c,int nRows,int nCol)
+    public void move(Card c,int nRows,int nCol)
     {
-        if(c==1)
+        if(c.getCardFunc()==Card.specFunc.none || c.getCardFunc()==Card.specFunc.drawAgain)
         {
-            if(Row==startRow && Column==startColumn)
+            if(c.getType()==1 || c.getType()==2)
             {
-                if(team==Sorry.Owner.Player1)
-                    Row-=1;
-                else if(team==Sorry.Owner.Player2)
-                    Column+=1;
-                else if(team==Sorry.Owner.Player3)
-                    Row+=1;
+                if(Row==startRow && Column==startColumn)
+                {
+                    if(team==Sorry.Owner.Player1)
+                        Row-=1;
+                    else if(team==Sorry.Owner.Player2)
+                        Column+=1;
+                    else if(team==Sorry.Owner.Player3)
+                        Row+=1;
+                    else
+                        Column-=1;
+                    
+                    if(c.getType()==2)
+                        moveDir(nRows,nCol,1);
+                }
                 else
-                    Column-=1;
+                {
+                    moveDir(nRows,nCol,c.getType());
+                }
             }
             else
             {
-                moveDir(nRows,nCol,1);
+                moveDir(nRows,nCol,c.getType());
             }
+        }
+        else if(c.getCardFunc()==Card.specFunc.backwards)
+        {
+            moveDir(nRows,nCol,-c.getType());
         }
     }
     public void moveDir(int nRows, int nCol,int Distance)
     {
-        for(int i=0; i<Distance; i++)
+        if(Distance>0)
         {
-            if(Row==0 && Column<nCol-1)
+            for(int i=0; i<Distance; i++)
             {
-                Column+=1;
+                if(Row==0 && Column<nCol-1)
+                {
+                    Column+=1;
+                }
+                else if(Column==nCol-1 && Row<nRows-1)
+                {
+                    Row+=1;
+                }
+                else if(Column>0 && Row==nRows-1)
+                {
+                    Column-=1;
+                }
+                else if(Column==0 && Row>0)
+                {
+                    Row-=1;
+                }
             }
-            else if(Column==nCol-1 && Row<nRows-1)
+        }
+        else if(Distance<0)
+        {
+            for(int i=0; i>Distance; i--)
             {
-                Row+=1;
-            }
-            else if(Column>0 && Row==nRows-1)
-            {
-                Column-=1;
-            }
-            else if(Column==0 && Row>0)
-            {
-                Row-=1;
+                if(Row==0 && Column>0)
+                {
+                    Column-=1;
+                }
+                else if(Column==nCol-1 && Row>0)
+                {
+                    Row-=1;
+                }
+                else if(Column<nCol-1 && Row==nRows-1)
+                {
+                    Column+=1;
+                }
+                else if(Column==0 && Row<nRows-1)
+                {
+                    Row+=1;
+                }
             }
         }
     }
