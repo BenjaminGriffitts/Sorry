@@ -81,9 +81,15 @@ public class Card {
         g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);
+        g.setFont(new Font("Arial",Font.BOLD,30));
+        g.drawString(""+type, x+width/2-8, y+height/2+2);
+        if(cardFunc==specFunc.split)
+        {
+            
+            g.drawString("Split?", (x+width/4)+6, y+height-7);
+            g.setFont(new Font("Monospaced",Font.BOLD,20));
+            g.drawString("Yes", x+1, y+height-7);
+            g.drawString("No", x+width-30, y+height-7);
+        }
     }
-//    public String toString()
-//    {
-//        
-//    }
 }

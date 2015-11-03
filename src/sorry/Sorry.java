@@ -34,6 +34,8 @@ public class Sorry extends JFrame implements Runnable {
     int SlidersCol[]={1,9,numColumns-1,numColumns-1,numColumns-2,5        ,0,0};
     static Menu gui=new Menu();
     static boolean GameStart=false;
+    Rectangle rect1 = new Rectangle(1+getX(0)+6*getWidth2()/numColumns, (getY(0)+4*getHeight2()/numRows)-(2*getHeight2()/numRows)-27, 20, 240);
+    Rectangle rect2 = new Rectangle(120, 80, 80, 120);
 
     static Sorry frame1;
     public static void main(String[] args) {
@@ -59,13 +61,17 @@ public class Sorry extends JFrame implements Runnable {
                     if(MoveFinished)
                     {
                         currentCardType=Card.TakeCard();
-                        System.out.println(currentCardType.getType());
                         MoveFinished=!MoveFinished;
                     }
                     else if(!MoveFinished)
                     {
                         Piece p=Piece.isPieceThere(row,column);
-                        if(p!=null && p.getTeam()==currentPlayer)
+                        if(currentCardType.getCardFunc()==Card.specFunc.split)
+                        {
+                            
+                            
+                        }
+                        else if(p!=null && p.getTeam()==currentPlayer)
                         {
                             p.move(currentCardType,numRows,numColumns);
                             if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
@@ -211,7 +217,8 @@ public class Sorry extends JFrame implements Runnable {
         }
         if(currentCardType!=null)
         {
-            currentCardType.draw(g, getX(0)+6*getWidth2()/numColumns, getY(0)+5*getHeight2()/numRows,3*getWidth2()/numColumns,5*getHeight2()/numRows);
+            currentCardType.draw(g, getX(0)+6*getWidth2()/numColumns, getY(0)+4*getHeight2()/numRows,4*getWidth2()/numColumns,2*getHeight2()/numRows);
+            
         }
         gOld.drawImage(image, 0, 0, null);
     }
