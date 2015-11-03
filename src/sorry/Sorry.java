@@ -12,8 +12,8 @@ public class Sorry extends JFrame implements Runnable {
     static final int YBORDER = 20;
     static final int YTITLE = 30;
     static final int WINDOW_BORDER = 8;
-    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 526;
-    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 526;
+    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 715;
+    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 718;
     boolean animateFirstTime = true;
     int xsize = -1;
     int ysize = -1;
@@ -292,17 +292,14 @@ public class Sorry extends JFrame implements Runnable {
     {
         for(int i=0;i<4;i++)
         {
-//            for(int i1=0;i1<4;i1++)
-//            {
                 if(i==0)
-                    new Piece(4,1,Owner.Player1);
+                    new Piece(1,numRows-5,Owner.Player1);
                 if(i==1)
-                    new Piece(numColumns-2,4,Owner.Player2);
+                    new Piece(4,1,Owner.Player2);
                 if(i==2)
-                    new Piece(numColumns-5,numRows-2,Owner.Player3);
+                    new Piece(numColumns-2,4,Owner.Player3);
                 if(i==3)
-                    new Piece(1,numRows-5,Owner.Player4);
-//            }
+                    new Piece(numColumns-5,numRows-2,Owner.Player4);
         }
     }
     public void changeTeam()
