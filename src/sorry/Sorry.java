@@ -12,8 +12,8 @@ public class Sorry extends JFrame implements Runnable {
     static final int YBORDER = 20;
     static final int YTITLE = 30;
     static final int WINDOW_BORDER = 8;
-    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 715;
-    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 718;
+    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 720;
+    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 720;
     boolean animateFirstTime = true;
     int xsize = -1;
     int ysize = -1;
@@ -67,7 +67,6 @@ public class Sorry extends JFrame implements Runnable {
                         Piece p=Piece.isPieceThere(row,column);
                         if(p!=null && p.getTeam()==currentPlayer)
                         {
-                            
                             p.move(currentCardType,numRows,numColumns);
                             if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
                                 changeTeam();
@@ -198,18 +197,18 @@ public class Sorry extends JFrame implements Runnable {
         Piece.draw(g,getX(0),getY(0),getHeight2()/numRows,getWidth2()/numColumns);
         
         g.setColor(Color.BLACK);
-//        //horizontal lines
-//        for (int zi=1;zi<numRows;zi++)
-//        {
-//            g.drawLine(getX(0) ,getY(0)+zi*getHeight2()/numRows ,
-//            getX(getWidth2()) ,getY(0)+zi*getHeight2()/numRows );
-//        }
-//        //vertical lines
-//        for (int zi=1;zi<numColumns;zi++)
-//        {
-//            g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
-//            getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
-//        }
+        //horizontal lines
+        for (int zi=1;zi<numRows;zi++)
+        {
+            g.drawLine(getX(0) ,getY(0)+zi*getHeight2()/numRows ,
+            getX(getWidth2()) ,getY(0)+zi*getHeight2()/numRows );
+        }
+        //vertical lines
+        for (int zi=1;zi<numColumns;zi++)
+        {
+            g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
+            getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
+        }
         if(currentCardType!=null)
         {
             currentCardType.draw(g, getX(0)+6*getWidth2()/numColumns, getY(0)+5*getHeight2()/numRows,3*getWidth2()/numColumns,5*getHeight2()/numRows);

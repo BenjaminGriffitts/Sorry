@@ -20,7 +20,6 @@ public class Piece {
     }
     static public void draw(Graphics2D g,int x, int y,int height,int width)
     {
-        
         for(Piece i: Pieces)
         {
             if(i.team==Sorry.Owner.Player1)
@@ -57,11 +56,11 @@ public class Piece {
             {
                 if(Row==startRow && Column==startColumn)
                 {
-                    if(team==Sorry.Owner.Player1)
+                    if(team==Sorry.Owner.Player2)
                         Row-=1;
-                    else if(team==Sorry.Owner.Player2)
-                        Column+=1;
                     else if(team==Sorry.Owner.Player3)
+                        Column+=1;
+                    else if(team==Sorry.Owner.Player4)
                         Row+=1;
                     else
                         Column-=1;
