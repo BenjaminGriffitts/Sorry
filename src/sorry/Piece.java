@@ -8,6 +8,7 @@ public class Piece {
     private int startRow;
     private Sorry.Owner team;
     static ArrayList<Piece> Pieces =new ArrayList<Piece>();
+    private Color c=null;
     
     Piece(int _column,int _row, Sorry.Owner _team)
     {
@@ -16,22 +17,13 @@ public class Piece {
         team = _team;
         startColumn = Column;
         startRow = Row;
+        setColor();
         Pieces.add(this);
     }
-    static public void draw(Graphics2D g,int x, int y,int height,int width)
+    public void draw(Graphics2D g,int x, int y,int height,int width)
     {
-        for(Piece i: Pieces)
-        {
-            if(i.team==Sorry.Owner.Player1)
-                g.setColor(Color.BLUE);
-            else if(i.team==Sorry.Owner.Player2)
-                g.setColor(Color.YELLOW);
-            else if(i.team==Sorry.Owner.Player3)
-                g.setColor(Color.GREEN);
-            else
-                g.setColor(Color.RED);
-            g.fillOval(x+i.Column*width, y+i.Row*height, width, height);
-        }
+            g.setColor(c);
+            g.fillOval(x+Column*width, y+Row*height, width, height);
     }
     static public Piece isPieceThere(int row, int column)
     {
@@ -43,9 +35,75 @@ public class Piece {
         }
         return(null);
     }
+    static public Piece isPieceThere(int row, int column,Piece p)
+    {
+        for(Piece i: Pieces)
+        {
+            if(i.Row==row && i.Column==column && i!=p)
+                return(i);
+                
+        }
+        return(null);
+    }
+    private void setColor()
+    {
+        if(team==Sorry.Owner.Player1)
+            {
+                c=Color.BLUE;
+            }
+        else if(team==Sorry.Owner.Player2)
+            {
+                c=Color.YELLOW;
+            }
+        else if(team==Sorry.Owner.Player3)
+            {
+                c=Color.GREEN;
+            }
+        else
+            {
+                c=Color.RED;
+            }
+    }
+    static public void resetColors()
+    {
+        //resets all colors back to there original
+        for(Piece i:Pieces)
+            if(i.team==Sorry.Owner.Player1)
+                {
+                    i.c=Color.BLUE;
+                }
+            else if(i.team==Sorry.Owner.Player2)
+                {
+                    i.c=Color.YELLOW;
+                }
+            else if(i.team==Sorry.Owner.Player3)
+                {
+                    i.c=Color.GREEN;
+                }
+            else
+                {
+                    i.c=Color.RED;
+                }
+    }
+    static public int numPieces()
+    {
+        return(Pieces.size());
+    }
+    static public Piece getPiece(int i)
+    {
+        return(Pieces.get(i));
+    }
 
     public Sorry.Owner getTeam() {
         return team;
+    }
+
+    public Color getC() {
+        return c;
+    }
+
+    public void setC(Color c) {
+        this.c = c;
     }
     
     public void move(Card c,int nRows,int nCol)
@@ -81,6 +139,14 @@ public class Piece {
         else if(c.getCardFunc()==Card.specFunc.backwards)
         {
             moveDir(nRows,nCol,-c.getType());
+        }
+        
+        //Checks if you land on another Piece and that other piece is not your own, resets piece back to start
+        Piece p = isPieceThere(Row,Column,this);
+        if(p!=null && p.team!=team)
+        {
+            p.Column=p.startColumn;
+            p.Row=p.startRow;
         }
     }
     public void moveDir(int nRows, int nCol,int Distance)

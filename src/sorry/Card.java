@@ -5,13 +5,19 @@ import java.awt.*;
 public class Card {
     static final int totalCards=45;
     static ArrayList<Card> Cards = new ArrayList<Card>();
-    static enum specFunc{none, drawAgain, split, backwards, choice, swap, sorry};
+    //position for yes option
+    static int option1[]={0,0};
+    //position for no option
+    static int option2[]={0,0};
+    static enum specFunc{none, drawAgain, split, backwards, choice, swap, sorry, splitted};
     private specFunc cardFunc;
     private int type;
+    private Piece p;
+    
     Card(int _type)
     {
         type=_type;
-        setFunc();
+        resetFunc();
     }
     public static void resetDeck()
     {
@@ -35,8 +41,19 @@ public class Card {
     }
     public static Card TakeCard()
     {
+//Test specific cards with this code
+//        Card card=null;
+//        while(true)
+//        {
+//        card=Cards.get(0);
+//        Cards.remove(0);
+//        if(card.type==7 || card.type==1)
+//            break;
+//        }
+        
         Card card=Cards.get(0);
         Cards.remove(0);
+            
         return(card);
     }
     public int getType()
@@ -47,7 +64,7 @@ public class Card {
     {
         return(Cards.isEmpty());
     }
-    private void setFunc()
+    private void resetFunc()
     {
         if(type==1)
             cardFunc=specFunc.none;
@@ -76,20 +93,67 @@ public class Card {
     public specFunc getCardFunc() {
         return cardFunc;
     }
+    public void setFunc(specFunc i){
+        cardFunc=i;
+    }
+
+    public Piece getP() {
+        return p;
+    }
+
+    public void setP(Piece p) {
+        this.p = p;
+    }
+    
     public void draw(Graphics2D g,int x, int y, int width, int height) {
+        option1[0]=x+1;
+        option1[1]=y+height-7;
+        option2[0]=x+width-30;
+        option2[1]=y+height-7;
         g.setColor(Color.WHITE);
         g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);
         g.setFont(new Font("Arial",Font.BOLD,30));
         g.drawString(""+type, x+width/2-8, y+height/2+2);
-        if(cardFunc==specFunc.split)
+        //When cardFunc is split and when a piece is selected you see the options
+        if(cardFunc==specFunc.split && p!=null)
         {
-            
             g.drawString("Split?", (x+width/4)+6, y+height-7);
-            g.setFont(new Font("Monospaced",Font.BOLD,20));
-            g.drawString("Yes", x+1, y+height-7);
-            g.drawString("No", x+width-30, y+height-7);
+            g.setFont(Sorry.CardFont);
+            String yes= "Yes";
+            String no="No";
+            if(BoundingBox.isMouseIn(yes, option1[0], option1[1], Sorry.CardFont,g))
+                    g.setColor(Color.red);
+            
+            g.drawString("Yes", option1[0], option1[1]);
+            
+            if(BoundingBox.isMouseIn(no, option2[0], option2[1], Sorry.CardFont,g))
+                g.setColor(Color.red);
+            else
+                g.setColor(Color.BLACK);
+            
+            g.drawString("No", option2[0], option2[1]);
         }
-    }
+        //When cardFunc is swap and when a piece is selected you see the options
+        else if(cardFunc==specFunc.swap && p!=null)
+        {
+            g.drawString("Swap?", (x+width/4), y+height-7);
+            g.setFont(Sorry.CardFont);
+            String yes= "Yes";
+            String no="No";
+            if(BoundingBox.isMouseIn(yes, option1[0], option1[1], Sorry.CardFont,g))
+                    g.setColor(Color.red);
+            
+            g.drawString("Yes", option1[0], option1[1]);
+            
+            if(BoundingBox.isMouseIn(no, option2[0], option2[1], Sorry.CardFont,g))
+                g.setColor(Color.red);
+            else
+                g.setColor(Color.BLACK);
+            
+            g.drawString("No", option2[0], option2[1]);
+        }
+   }
+    
 }
