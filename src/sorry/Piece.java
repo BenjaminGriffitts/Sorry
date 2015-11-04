@@ -138,7 +138,10 @@ public class Piece {
         }
         else if(c.getCardFunc()==Card.specFunc.backwards)
         {
-            moveDir(nRows,nCol,-c.getType());
+            if(c.getType()==10)
+                moveDir(nRows,nCol,-1);
+            else
+                moveDir(nRows,nCol,-c.getType());
         }
         
         //Checks if you land on another Piece and that other piece is not your own, resets piece back to start
@@ -196,5 +199,20 @@ public class Piece {
             }
         }
     }
-
+    public static void swapPieces(Piece piece1,Piece piece2)
+    {
+        int pieceRow = piece1.Row;
+        int pieceCol = piece1.Column;
+        piece1.Row = piece2.Row;
+        piece1.Column = piece2.Column;
+        piece2.Row = pieceRow;
+        piece2.Column = pieceCol;
+    }
+    public boolean isInStart()
+    {
+        if(Row == startRow && Column == startColumn)
+            return(true);
+        else 
+            return(false);
+    }
 }

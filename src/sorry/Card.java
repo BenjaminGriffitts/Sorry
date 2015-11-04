@@ -42,17 +42,17 @@ public class Card {
     public static Card TakeCard()
     {
 //Test specific cards with this code
-//        Card card=null;
-//        while(true)
-//        {
-//        card=Cards.get(0);
-//        Cards.remove(0);
-//        if(card.type==7 || card.type==1)
-//            break;
-//        }
-        
-        Card card=Cards.get(0);
+        Card card=null;
+        while(true)
+        {
+        card=Cards.get(0);
         Cards.remove(0);
+        if(card.type==10 || card.type==1)
+            break;
+        }
+        
+//        Card card=Cards.get(0);
+//        Cards.remove(0);
             
         return(card);
     }
@@ -139,6 +139,25 @@ public class Card {
         else if(cardFunc==specFunc.swap && p!=null)
         {
             g.drawString("Swap?", (x+width/4), y+height-7);
+            g.setFont(Sorry.CardFont);
+            String yes= "Yes";
+            String no="No";
+            if(BoundingBox.isMouseIn(yes, option1[0], option1[1], Sorry.CardFont,g))
+                    g.setColor(Color.red);
+            
+            g.drawString("Yes", option1[0], option1[1]);
+            
+            if(BoundingBox.isMouseIn(no, option2[0], option2[1], Sorry.CardFont,g))
+                g.setColor(Color.red);
+            else
+                g.setColor(Color.BLACK);
+            
+            g.drawString("No", option2[0], option2[1]);
+        }
+        else if(cardFunc==specFunc.choice && p!=null)
+        {
+            g.setFont(new Font("Arial",Font.BOLD,25));
+            g.drawString("1 Back?", (x+width/4), y+height-7);
             g.setFont(Sorry.CardFont);
             String yes= "Yes";
             String no="No";
