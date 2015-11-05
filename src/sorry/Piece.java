@@ -215,4 +215,32 @@ public class Piece {
         else 
             return(false);
     }
+    public boolean checkCanMove(Sorry.Owner currentTeam)
+    {
+        for(Piece temp: Pieces)
+        {
+            if(temp!=null && temp.team==currentTeam && !temp.isInStart())
+            {
+                return(true);
+            }
+        }
+                
+        return(false);
+    }
+    public boolean checkCanMove(Sorry.Owner currentTeam, Piece p)
+    {
+        for(Piece temp: Pieces)
+        {
+            if(temp!=null && temp.team==currentTeam && !temp.isInStart() && temp!=p)
+            {
+                return(true);
+            }
+        }
+                
+        return(false);
+    }
+    static public void clearPieces()
+    {
+        Pieces.clear();
+    }
 }

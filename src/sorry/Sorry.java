@@ -28,7 +28,7 @@ public class Sorry extends JFrame implements Runnable {
     boolean MoveFinished; //if true next click is drawing a card
     Card currentCardType;
     Owner currentPlayer;
-    boolean selectPiece;
+    
     static Font CardFont = new Font("Arial",Font.BOLD,20);
     Piece selectedP=null;
     
@@ -77,7 +77,14 @@ public class Sorry extends JFrame implements Runnable {
                         
                         if(currentCardType.getCardFunc()==Card.specFunc.split && currentCardType.getP()!=null)
                         {
-                            if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
+                            if(!currentCardType.getP().checkCanMove(currentPlayer))
+                            {
+                                currentCardType=null;
+                                MoveFinished=!MoveFinished;
+                                changeTeam();
+                                Piece.resetColors();
+                            }
+                            else if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
                             {
                                 //need code
                                 
@@ -95,10 +102,18 @@ public class Sorry extends JFrame implements Runnable {
                         }
                         else if(currentCardType.getCardFunc()==Card.specFunc.swap && currentCardType.getP()!=null)
                         {
-                            if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
+                            if(!currentCardType.getP().checkCanMove(currentPlayer))
+                            {
+                                currentCardType=null;
+                                MoveFinished=!MoveFinished;
+                                changeTeam();
+                                Piece.resetColors();
+                            }
+                            else if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
                             {
                                 //need code
-                                selectPiece = true;
+                                if(!currentCardType.getP().isInStart())
+                                    currentCardType.setSelectPiece(true);
                                 
                             }
                             else if(BoundingBox.isMouseIn("no", Card.option2[0], Card.option2[1], CardFont, g))
@@ -114,7 +129,14 @@ public class Sorry extends JFrame implements Runnable {
                         }
                         else if(currentCardType.getCardFunc()==Card.specFunc.choice && currentCardType.getP()!=null)
                         {
-                            if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
+                            if(!currentCardType.getP().checkCanMove(currentPlayer))
+                            {
+                                currentCardType=null;
+                                MoveFinished=!MoveFinished;
+                                changeTeam();
+                                Piece.resetColors();
+                            }
+                            else if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
                             {
                                 //need code
                                 currentCardType.setFunc(Card.specFunc.backwards);
@@ -136,26 +158,29 @@ public class Sorry extends JFrame implements Runnable {
                                 Piece.resetColors();
                             }
                         }
-                        else if(p!=null && p.getTeam()==currentPlayer)
+                        else if(currentCardType.getP()!=null && p.getTeam()==currentPlayer)
                         {
-                            p.move(currentCardType,numRows,numColumns);
-                            if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
+                            if((currentCardType.getType()==1 || currentCardType.getType()==2) || !currentCardType.getP().checkCanMove(currentPlayer, currentCardType.getP()))
                             {
-                                changeTeam();
-                                currentCardType=null;
+                                currentCardType.getP().move(currentCardType,numRows,numColumns);
+                                if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
+                                {
+                                    changeTeam();
+                                    currentCardType=null;
+                                }
+                                MoveFinished=!MoveFinished;
+                                Piece.resetColors();
                             }
-                            MoveFinished=!MoveFinished;
-                            Piece.resetColors();
                         }
-                        if(selectPiece)
+                        
+                        if(currentCardType != null && currentCardType.getSelectPiece())
                         {
-                            if(Piece.isPieceThere(row, column) != null && currentCardType.getP() != null && (!Piece.isPieceThere(row, column).isInStart() && !currentCardType.getP().isInStart()))
+                            Piece tempPiece = Piece.isPieceThere(row, column);
+                            if(tempPiece != null && (!tempPiece.isInStart() && !currentCardType.getP().isInStart()))
                             {
-                                Piece tempPiece = Piece.isPieceThere(row, column);
                                 Piece.swapPieces(currentCardType.getP(),tempPiece);
                                 currentCardType=null;
                                 MoveFinished=!MoveFinished;
-                                selectPiece = false;
                                 changeTeam();
                                 Piece.resetColors();
                             }
@@ -331,8 +356,8 @@ public class Sorry extends JFrame implements Runnable {
         currentPlayer=Owner.Player1;
         MoveFinished=true;
         currentCardType=null;
+        setupPiece();
         Piece.resetColors();
-        selectPiece=false;
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -387,8 +412,8 @@ public class Sorry extends JFrame implements Runnable {
     {
         for(int i=0;i<4;i++)
         {
-//            for(int i1=0;i1<4;i1++)
-//            {
+            for(int i1=0;i1<4;i1++)
+            {
                 if(i==0)
                     new Piece(1,numRows-5,Owner.Player1);
                 if(i==1)
@@ -397,7 +422,7 @@ public class Sorry extends JFrame implements Runnable {
                     new Piece(numColumns-2,4,Owner.Player3);
                 if(i==3)
                     new Piece(numColumns-5,numRows-2,Owner.Player4);
-//            }
+            }
         }
     }
     public void changeTeam()

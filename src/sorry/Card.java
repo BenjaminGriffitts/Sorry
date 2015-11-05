@@ -13,11 +13,13 @@ public class Card {
     private specFunc cardFunc;
     private int type;
     private Piece p;
+    boolean selectPiece;
     
     Card(int _type)
     {
         type=_type;
         resetFunc();
+        selectPiece=false;
     }
     public static void resetDeck()
     {
@@ -42,20 +44,29 @@ public class Card {
     public static Card TakeCard()
     {
 //Test specific cards with this code
-        Card card=null;
-        while(true)
-        {
-        card=Cards.get(0);
-        Cards.remove(0);
-        if(card.type==10 || card.type==1)
-            break;
-        }
-        
-//        Card card=Cards.get(0);
+//        Card card=null;
+//        while(true)
+//        {
+//        card=Cards.get(0);
 //        Cards.remove(0);
+//        if(card.type==10 || card.type==1)
+//            break;
+//        }
+        
+        Card card=Cards.get(0);
+        Cards.remove(0);
             
         return(card);
     }
+
+    public boolean getSelectPiece() {
+        return selectPiece;
+    }
+
+    public void setSelectPiece(boolean selectPiece) {
+        this.selectPiece = selectPiece;
+    }
+    
     public int getType()
     {
         return(type);
@@ -117,7 +128,7 @@ public class Card {
         g.setFont(new Font("Arial",Font.BOLD,30));
         g.drawString(""+type, x+width/2-8, y+height/2+2);
         //When cardFunc is split and when a piece is selected you see the options
-        if(cardFunc==specFunc.split && p!=null)
+        if(cardFunc==specFunc.split && p!=null && !p.isInStart())
         {
             g.drawString("Split?", (x+width/4)+6, y+height-7);
             g.setFont(Sorry.CardFont);
@@ -136,7 +147,7 @@ public class Card {
             g.drawString("No", option2[0], option2[1]);
         }
         //When cardFunc is swap and when a piece is selected you see the options
-        else if(cardFunc==specFunc.swap && p!=null)
+        else if(!selectPiece && cardFunc==specFunc.swap && p!=null && !p.isInStart())
         {
             g.drawString("Swap?", (x+width/4), y+height-7);
             g.setFont(Sorry.CardFont);
@@ -154,7 +165,7 @@ public class Card {
             
             g.drawString("No", option2[0], option2[1]);
         }
-        else if(cardFunc==specFunc.choice && p!=null)
+        else if(cardFunc==specFunc.choice && p!=null && !p.isInStart())
         {
             g.setFont(new Font("Arial",Font.BOLD,25));
             g.drawString("1 Back?", (x+width/4), y+height-7);
