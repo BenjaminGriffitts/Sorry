@@ -44,17 +44,17 @@ public class Card {
     public static Card TakeCard()
     {
 //Test specific cards with this code
-//        Card card=null;
-//        while(true)
-//        {
-//        card=Cards.get(0);
-//        Cards.remove(0);
-//        if(card.type==10 || card.type==1)
-//            break;
-//        }
-        
-        Card card=Cards.get(0);
+        Card card=null;
+        while(true)
+        {
+        card=Cards.get(0);
         Cards.remove(0);
+        if(card.type==13 || card.type==1)
+            break;
+        }
+        
+//        Card card=Cards.get(0);
+//        Cards.remove(0);
             
         return(card);
     }

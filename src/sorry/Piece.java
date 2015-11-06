@@ -115,13 +115,25 @@ public class Piece {
                 if(Row==startRow && Column==startColumn)
                 {
                     if(team==Sorry.Owner.Player2)
-                        Row-=1;
+                    {
+                        Row=0;
+                        Column = 4;
+                    }
                     else if(team==Sorry.Owner.Player3)
-                        Column+=1;
+                    {
+                        Column=nCol-1;
+                        Row = 4;
+                    }
                     else if(team==Sorry.Owner.Player4)
-                        Row+=1;
+                    {
+                        Row=nRows-1;
+                        Column = nCol-5;
+                    }
                     else
-                        Column-=1;
+                    {
+                        Column=0;
+                        Row = nRows-5;
+                    }
                     
                     if(c.getType()==2)
                         moveDir(nRows,nCol,1);
@@ -208,6 +220,13 @@ public class Piece {
         piece2.Row = pieceRow;
         piece2.Column = pieceCol;
     }
+    public static void Sorry(Piece piece1,Piece piece2)
+    {
+        piece1.Row = piece2.Row;
+        piece1.Column = piece2.Column;
+        piece2.Column=piece2.startColumn;
+        piece2.Row=piece2.startRow;
+    }
     public boolean isInStart()
     {
         if(Row == startRow && Column == startColumn)
@@ -227,11 +246,36 @@ public class Piece {
                 
         return(false);
     }
+    static public boolean checkSorry(Sorry.Owner currentTeam)
+    {
+        for(Piece temp: Pieces)
+        {
+            if(temp!=null && temp.team!=currentTeam && !temp.isInStart())
+            {
+                return(true);
+            }
+        }
+                
+        return(false);
+    }
+    static public boolean checkSorry(Piece p)
+    {
+        for(Piece temp: Pieces)
+        {
+            if(temp!=null && temp.team==p.team && temp.isInStart())
+                return(true);
+        }
+        return(false);
+    }
     public boolean checkCanMove(Sorry.Owner currentTeam, Piece p)
     {
         for(Piece temp: Pieces)
         {
-            if(temp!=null && temp.team==currentTeam && !temp.isInStart() && temp!=p)
+            if(!p.isInStart())
+            {
+                
+            }
+            else if(temp!=null && temp.team==currentTeam && !temp.isInStart() && temp!=p)
             {
                 return(true);
             }
