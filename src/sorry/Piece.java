@@ -1,4 +1,5 @@
 package sorry;
+import Tile.*;
 import java.util.ArrayList;
 import java.awt.*;
 public class Piece {
@@ -9,6 +10,7 @@ public class Piece {
     private Sorry.Owner team;
     static ArrayList<Piece> Pieces =new ArrayList<Piece>();
     private Color c=null;
+    private int howFar;
     
     Piece(int _column,int _row, Sorry.Owner _team)
     {
@@ -140,12 +142,16 @@ public class Piece {
                 }
                 else
                 {
-                    moveDir(nRows,nCol,c.getType());
+                    if(Tile.getTile(Row, Column) instanceof TileHome && ((TileHome)Tile.getTile(Row, Column)).getDistanceFromEnd()>=c.getType())
+                        moveDir(nRows,nCol,c.getType());
+                    else if(howFar>=c.getType())
+                        moveDir(nRows,nCol,c.getType());
                 }
             }
             else
             {
-                moveDir(nRows,nCol,c.getType());
+                if(howFar>=c.getType())
+                    moveDir(nRows,nCol,c.getType());
             }
         }
         else if(c.getCardFunc()==Card.specFunc.backwards)
@@ -162,7 +168,19 @@ public class Piece {
         {
             p.Column=p.startColumn;
             p.Row=p.startRow;
+            p.howFarTillHome();
         }
+        
+        if(Tile.getTile(Row,Column) instanceof TileSliders && howFar>6)
+        {
+            if(Row==6 || Column==6 || Row==9 || Column==9)
+                moveDir(nRows,nCol,4);
+            else
+                moveDir(nRows,nCol,3);
+        }
+        
+        howFarTillHome();
+            
     }
     public void moveDir(int nRows, int nCol,int Distance)
     {
@@ -170,45 +188,87 @@ public class Piece {
         {
             for(int i=0; i<Distance; i++)
             {
-                if(Row==0 && Column<nCol-1)
+                if(Tile.getTile(Row, Column) instanceof TileHome && team==((TileHome)Tile.getTile(Row, Column)).getTeam())
                 {
-                    Column+=1;
+                    if(team==Sorry.Owner.Player1)
+                    {
+                        Column+=1;
+                    }
+                    else if(team==Sorry.Owner.Player2)
+                    {
+                        Row+=1;
+                    }
+                    else if(team==Sorry.Owner.Player3)
+                    {
+                        Column-=1;
+                    }
+                    else if(team==Sorry.Owner.Player4)
+                    {
+                        Row-=1;
+                    }
                 }
-                else if(Column==nCol-1 && Row<nRows-1)
+                else
                 {
-                    Row+=1;
-                }
-                else if(Column>0 && Row==nRows-1)
-                {
-                    Column-=1;
-                }
-                else if(Column==0 && Row>0)
-                {
-                    Row-=1;
+                    if(Row==0 && Column<nCol-1)
+                    {
+                        Column+=1;
+                    }
+                    else if(Column==nCol-1 && Row<nRows-1)
+                    {
+                        Row+=1;
+                    }
+                    else if(Column>0 && Row==nRows-1)
+                    {
+                        Column-=1;
+                    }
+                    else if(Column==0 && Row>0)
+                    {
+                        Row-=1;
+                    }
                 }
             }
         }
         else if(Distance<0)
         {
-            for(int i=0; i>Distance; i--)
-            {
-                if(Row==0 && Column>0)
+            if(Tile.getTile(Row, Column) instanceof TileHome && team==((TileHome)Tile.getTile(Row, Column)).getTeam() && ((TileHome)Tile.getTile(Row, Column)).getDistanceFromEnd()<6)
                 {
-                    Column-=1;
+                    if(team==Sorry.Owner.Player1)
+                    {
+                        Column+=1;
+                    }
+                    else if(team==Sorry.Owner.Player2)
+                    {
+                        Row+=1;
+                    }
+                    else if(team==Sorry.Owner.Player3)
+                    {
+                        Column-=1;
+                    }
+                    else if(team==Sorry.Owner.Player4)
+                    {
+                        Row-=1;
+                    }
                 }
-                else if(Column==nCol-1 && Row>0)
+            else
+                for(int i=0; i>Distance; i--)
                 {
-                    Row-=1;
+                    if(Row==0 && Column>0)
+                    {
+                        Column-=1;
+                    }
+                    else if(Column==nCol-1 && Row>0)
+                    {
+                        Row-=1;
+                    }
+                    else if(Column<nCol-1 && Row==nRows-1)
+                    {
+                        Column+=1;
+                    }
+                    else if(Column==0 && Row<nRows-1)
+                    {
+                        Row+=1;
+                    }
                 }
-                else if(Column<nCol-1 && Row==nRows-1)
-                {
-                    Column+=1;
-                }
-                else if(Column==0 && Row<nRows-1)
-                {
-                    Row+=1;
-                }
-            }
         }
     }
     public static void swapPieces(Piece piece1,Piece piece2)
@@ -219,6 +279,8 @@ public class Piece {
         piece1.Column = piece2.Column;
         piece2.Row = pieceRow;
         piece2.Column = pieceCol;
+        piece1.howFarTillHome();
+        piece2.howFarTillHome();
     }
     public static void Sorry(Piece piece1,Piece piece2)
     {
@@ -226,6 +288,8 @@ public class Piece {
         piece1.Column = piece2.Column;
         piece2.Column=piece2.startColumn;
         piece2.Row=piece2.startRow;
+        piece1.howFarTillHome();
+        piece2.howFarTillHome();
     }
     public boolean isInStart()
     {
@@ -234,11 +298,12 @@ public class Piece {
         else 
             return(false);
     }
+    
     public boolean checkCanMove(Sorry.Owner currentTeam)
     {
         for(Piece temp: Pieces)
         {
-            if(temp!=null && temp.team==currentTeam && !temp.isInStart())
+            if(temp!=null && temp.team==currentTeam && !temp.isInStart() && !temp.safety(temp))
             {
                 return(true);
             }
@@ -246,11 +311,67 @@ public class Piece {
                 
         return(false);
     }
+    //Returns true if piece is safe
+    static public boolean safety(Piece p)
+    {
+        if(Tile.getTile(p.Row, p.Column) instanceof TileHome && ((TileHome)Tile.getTile(p.Row, p.Column)).getDistanceFromEnd()<6 && 
+                ((TileHome)Tile.getTile(p.Row, p.Column)).getTeam()==p.getTeam())
+            return(true);
+        
+        return(false);
+    }
+    public int howFarTillHome()
+    {
+        if(Tile.getTile(Row,Column) instanceof TileHome)
+        {
+            howFar=((TileHome)Tile.getTile(Row,Column)).getDistanceFromEnd();
+            return howFar;
+        }
+        else if(!isInStart())
+        {
+            int row=Row;
+            int col=Column;
+            int hF=0;
+            int nCol=Tile.getNumColumns();
+            int nRows=Tile.getNumRows();
+            for(int i=0; i<60; i++)
+            {
+                if(row==0 && col<nCol-1)
+                {
+                    col+=1;
+                }
+                else if(col==nCol-1 && row<nRows-1)
+                {
+                    row+=1;
+                }
+                else if(col>0 && row==nRows-1)
+                {
+                    col-=1;
+                }
+                else if(col==0 && row>0)
+                {
+                    row-=1;
+                }
+                
+                
+                hF+=1;
+                if(Tile.getTile(row,col) instanceof TileHome && ((TileHome)Tile.getTile(row,col)).getTeam()==team)
+                    break;
+            }
+            howFar=hF+6;
+            return hF;
+        }
+        else
+        {
+            howFar=66;
+            return 66;
+        }
+    }
     static public boolean checkSorry(Sorry.Owner currentTeam)
     {
         for(Piece temp: Pieces)
         {
-            if(temp!=null && temp.team!=currentTeam && !temp.isInStart())
+            if(temp!=null && temp.team!=currentTeam && !temp.isInStart() && !temp.safety(temp))
             {
                 return(true);
             }

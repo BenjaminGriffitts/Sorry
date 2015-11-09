@@ -1,12 +1,22 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Tile;
+import sorry.*;
 public class TileHome extends Tile{
-    TileHome(int _type)
+    private Sorry.Owner team;
+    private int distanceFromEnd;
+    TileHome(Sorry.Owner _team, int d)
     {
-        super(_type);
+        super(2);
+        team=_team;
+        distanceFromEnd=d;
     }
+
+    public Sorry.Owner getTeam() {
+        return team;
+    }
+
+    public int getDistanceFromEnd() {
+        return distanceFromEnd;
+    }
+    
     
 }

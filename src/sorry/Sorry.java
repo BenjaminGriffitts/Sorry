@@ -21,10 +21,10 @@ public class Sorry extends JFrame implements Runnable {
     Graphics2D g;
     Image sorryBoard;
 
-    final int numRows = 16;
-    final int numColumns = 16;
+    int numRows = Tile.getNumRows();
+    int numColumns = Tile.getNumColumns();
     
-    enum Owner{Player1, Player2, Player3, Player4};
+    public enum Owner{Player1, Player2, Player3, Player4};
     boolean MoveFinished; //if true next click is drawing a card
     Card currentCardType;
     Owner currentPlayer;
@@ -32,9 +32,11 @@ public class Sorry extends JFrame implements Runnable {
     static Font CardFont = new Font("Arial",Font.BOLD,20);
     Piece selectedP=null;
     
-    Tile board[][];
-    int SlidersRow[]={0,0,1           ,9           ,numRows-1   ,numRows-1,5,numRows-2};
-    int SlidersCol[]={1,9,numColumns-1,numColumns-1,numColumns-2,5        ,0,0};
+    
+    int SlidersRow[]={0,0,1           ,9           ,numRows-1   ,numRows-1,6,numRows-2};
+    int SlidersCol[]={1,9,numColumns-1,numColumns-1,numColumns-2,6        ,0,0};
+    int HomeRow[]={numRows-3,0,2           ,numRows-1};
+    int HomeCol[]={0        ,2,numColumns-1,numColumns-3};
     static Menu gui=new Menu();
     static boolean GameStart=false;
     static int mouseX=0;
@@ -94,7 +96,7 @@ public class Sorry extends JFrame implements Runnable {
                                 finishMove();
                             }
                         }
-                        else if(currentCardType.getCardFunc()==Card.specFunc.swap && currentCardType.getP()!=null)
+                        else if(currentCardType.getCardFunc()==Card.specFunc.swap && currentCardType.getP()!=null && !Piece.safety(currentCardType.getP()))
                         {
                             if(!currentCardType.getP().checkCanMove(currentPlayer))
                             {
@@ -151,7 +153,7 @@ public class Sorry extends JFrame implements Runnable {
                                 currentCardType.getP().move(currentCardType,numRows,numColumns);
                                 if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
                                 {
-                                    changeTeam();
+                                    //changeTeam();
                                     currentCardType=null;
                                 }
                                 MoveFinished=!MoveFinished;
@@ -165,7 +167,8 @@ public class Sorry extends JFrame implements Runnable {
                             Piece tempPiece = Piece.isPieceThere(row, column);
                             if(currentCardType.getCardFunc()==Card.specFunc.swap)
                             {
-                                if(tempPiece != null && !tempPiece.isInStart() && !currentCardType.getP().isInStart())
+                                if(tempPiece != null && !tempPiece.isInStart() && !currentCardType.getP().isInStart() && !Piece.safety(tempPiece) &&
+                                        !Piece.safety(currentCardType.getP()))
                                 {
                                     Piece.swapPieces(currentCardType.getP(),tempPiece);
                                     finishMove();
@@ -173,7 +176,8 @@ public class Sorry extends JFrame implements Runnable {
                             }
                             else
                             {
-                                if(tempPiece!=null && !tempPiece.isInStart() && currentCardType.getP().isInStart())
+                                if(tempPiece!=null && !tempPiece.isInStart() && currentCardType.getP().isInStart() && !Piece.safety(tempPiece) &&
+                                        !Piece.safety(currentCardType.getP()))
                                 {
                                     Piece.Sorry(currentCardType.getP(),tempPiece);
                                     finishMove();
@@ -317,10 +321,22 @@ public class Sorry extends JFrame implements Runnable {
 //        }
 //        //vertical lines
 //        for (int zi=1;zi<numColumns;zi++)
-//        {
+//        {+
 //            g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
 //            getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
 //        }
+//        for(int i=0;i<numRows;i++)
+//            for(int i1=0;i1<numColumns;i1++)
+//            {
+//                if(Tile.getTile(i,i1) instanceof TileHome)
+//                {
+//                    if(((TileHome)Tile.getTile(i,i1)).getTeam()==Owner.Player3)
+//                        g.setColor(Color.red);
+//                    else
+//                        g.setColor(Color.MAGENTA);
+//                    g.fillRect(getX(0)+i1*(getWidth2()/numColumns), getY(0)+i*(getHeight2()/numRows), getWidth2()/numColumns, getHeight2()/numRows);
+//                }
+//            }
         if(currentCardType!=null)
         {
             
@@ -363,7 +379,7 @@ public class Sorry extends JFrame implements Runnable {
                 xsize = getSize().width;
                 ysize = getSize().height;
             }
-            board = new Tile [numRows][numColumns];
+            Tile.setBoard();
             sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_Board.jpg");
             Card.resetDeck();
             setup();
@@ -394,12 +410,39 @@ public class Sorry extends JFrame implements Runnable {
             for (int zcolumn = 0;zcolumn < numColumns;zcolumn++)
             {
                 if(zrow==0 || zrow==numRows-1 || zcolumn==0 || zcolumn==numColumns-1)
-                    board[zrow][zcolumn]= new Tile(0);
+                    Tile.setTile(zrow, zcolumn,0);
             }
         }
         for(int i=0;i<SlidersRow.length;i++)
         {
-            board[SlidersRow[i]][SlidersCol[i]]=new Tile(1);
+            Tile.setTile(SlidersRow[i], SlidersCol[i], 1);
+        }
+        for(int i=0;i<HomeRow.length;i++)
+        {
+            if(i==0)
+            {
+                Tile.setTile(HomeRow[i], HomeCol[i],Owner.Player1,6);
+                for(int i1=1;i1<=6;i1++)
+                    Tile.setTile(HomeRow[i], HomeCol[i]+(i1*1), Owner.Player1,6-i1);
+            }
+            else if(i==1)
+            {
+                Tile.setTile(HomeRow[i], HomeCol[i],Owner.Player2,6);
+                for(int i1=1;i1<=6;i1++)
+                    Tile.setTile(HomeRow[i]+(i1*1), HomeCol[i], Owner.Player2,6-i1);
+            }
+            else if(i==2)
+            {
+                Tile.setTile(HomeRow[i], HomeCol[i],Owner.Player3,6);
+                for(int i1=1;i1<=6;i1++)
+                    Tile.setTile(HomeRow[i], HomeCol[i]-(i1*1), Owner.Player3,6-i1);
+            }
+            else if(i==3)
+            {
+                Tile.setTile(HomeRow[i], HomeCol[i],Owner.Player4,6);
+                for(int i1=1;i1<=6;i1++)
+                    Tile.setTile(HomeRow[i]-(i1*1), HomeCol[i], Owner.Player4,6-i1);
+            }
         }
         
     }

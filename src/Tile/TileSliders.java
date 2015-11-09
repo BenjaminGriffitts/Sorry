@@ -1,8 +1,7 @@
 package Tile;
 public class TileSliders extends Tile{
-    TileSliders(int _type)
+    TileSliders()
     {
-        super(_type);
+        super(1);
     }
-    
 }

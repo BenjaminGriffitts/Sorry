@@ -49,13 +49,13 @@ public class Card {
         {
         card=Cards.get(0);
         Cards.remove(0);
-        if(card.type==13 || card.type==1)
+        if(card.type==4 || card.type==1 || card.type==5)
             break;
         }
         
 //        Card card=Cards.get(0);
 //        Cards.remove(0);
-            
+//            
         return(card);
     }
 
