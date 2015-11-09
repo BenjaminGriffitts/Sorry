@@ -11,6 +11,7 @@ public class Piece {
     static ArrayList<Piece> Pieces =new ArrayList<Piece>();
     private Color c=null;
     private int howFar;
+    private Image i;
     
     Piece(int _column,int _row, Sorry.Owner _team)
     {
@@ -25,7 +26,8 @@ public class Piece {
     public void draw(Graphics2D g,int x, int y,int height,int width)
     {
             g.setColor(c);
-            g.fillOval(x+Column*width, y+Row*height, width, height);
+//            g.fillOval(x+Column*width, y+Row*height, width, height);
+            g.drawImage(i,x+Column*width,y+Row*height,width,height,Sorry.frame1);
     }
     static public Piece isPieceThere(int row, int column)
     {
@@ -65,6 +67,8 @@ public class Piece {
             {
                 c=Color.RED;
             }
+        
+        i=Toolkit.getDefaultToolkit().getImage("./Blue_Piece.png");
     }
     static public void resetColors()
     {
