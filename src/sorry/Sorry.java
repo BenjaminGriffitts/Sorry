@@ -41,6 +41,7 @@ public class Sorry extends JFrame implements Runnable {
     static boolean GameStart=false;
     static int mouseX=0;
     static int mouseY=0;
+    Sound bgsound=null;
 
     static Sorry frame1;
     public static void main(String[] args) {
@@ -381,10 +382,15 @@ public class Sorry extends JFrame implements Runnable {
             }
             Tile.setBoard();
             sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_Board.jpg");
+            bgsound = new Sound("./Mariachi.wav");
             Card.resetDeck();
             setup();
             setupPiece();
             reset();
+        }
+        if (bgsound.donePlaying)
+        {
+            bgsound = new Sound("./Mariachi.wav");
         }
                     
     }
