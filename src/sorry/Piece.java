@@ -11,7 +11,7 @@ public class Piece {
     static ArrayList<Piece> Pieces =new ArrayList<Piece>();
     private Color c=null;
     private int howFar;
-    private Image i;
+    private Image image;
     
     Piece(int _column,int _row, Sorry.Owner _team)
     {
@@ -27,7 +27,7 @@ public class Piece {
     {
             g.setColor(c);
 //            g.fillOval(x+Column*width, y+Row*height, width, height);
-            g.drawImage(i,x+Column*width,y+Row*height,width,height,Sorry.frame1);
+            g.drawImage(image,x+Column*width,y+Row*height,width,height,Sorry.frame1);
     }
     static public Piece isPieceThere(int row, int column)
     {
@@ -54,42 +54,50 @@ public class Piece {
         if(team==Sorry.Owner.Player1)
             {
                 c=Color.BLUE;
+                image=Toolkit.getDefaultToolkit().getImage("./Blue_Piece.png");
             }
         else if(team==Sorry.Owner.Player2)
             {
                 c=Color.YELLOW;
+                image=Toolkit.getDefaultToolkit().getImage("./Yellow_Piece.png");
             }
         else if(team==Sorry.Owner.Player3)
             {
                 c=Color.GREEN;
+                image=Toolkit.getDefaultToolkit().getImage("./Green_Piece.png");
             }
         else
             {
                 c=Color.RED;
+                image=Toolkit.getDefaultToolkit().getImage("./Red_Piece.png");
             }
         
-        i=Toolkit.getDefaultToolkit().getImage("./Blue_Piece.png");
+//        i=Toolkit.getDefaultToolkit().getImage("./Blue_Piece.png");
     }
     static public void resetColors()
     {
         //resets all colors back to there original
         for(Piece i:Pieces)
             if(i.team==Sorry.Owner.Player1)
-                {
-                    i.c=Color.BLUE;
-                }
-            else if(i.team==Sorry.Owner.Player2)
-                {
-                    i.c=Color.YELLOW;
-                }
-            else if(i.team==Sorry.Owner.Player3)
-                {
-                    i.c=Color.GREEN;
-                }
-            else
-                {
-                    i.c=Color.RED;
-                }
+            {
+                i.c=Color.BLUE;
+                i.image=Toolkit.getDefaultToolkit().getImage("./Blue_Piece.png");
+            }
+        else if(i.team==Sorry.Owner.Player2)
+            {
+                i.c=Color.YELLOW;
+                i.image=Toolkit.getDefaultToolkit().getImage("./Yellow_Piece.png");
+            }
+        else if(i.team==Sorry.Owner.Player3)
+            {
+                i.c=Color.GREEN;
+                i.image=Toolkit.getDefaultToolkit().getImage("./Green_Piece.png");
+            }
+        else
+            {
+                i.c=Color.RED;
+                i.image=Toolkit.getDefaultToolkit().getImage("./Red_Piece.png");
+            }
     }
     static public int numPieces()
     {
@@ -109,7 +117,27 @@ public class Piece {
     }
 
     public void setC(Color c) {
-        this.c = c;
+        if(c==Color.MAGENTA)
+        {
+            image=Toolkit.getDefaultToolkit().getImage("./MAGENTA_Piece.png");
+        }
+        else if(c==Color.BLUE)
+        {
+            image=Toolkit.getDefaultToolkit().getImage("./Blue_Piece.png");
+        }
+        else if(c==Color.YELLOW)
+        {
+            image=Toolkit.getDefaultToolkit().getImage("./Yellow_Piece.png");
+        }
+        else if(c==Color.GREEN)
+        {
+            image=Toolkit.getDefaultToolkit().getImage("./Green_Piece.png");
+        }
+        else
+        {
+            image=Toolkit.getDefaultToolkit().getImage("./Red_Piece.png");
+        }
+        this.c=c;
     }
     
     public void move(Card c,int nRows,int nCol)

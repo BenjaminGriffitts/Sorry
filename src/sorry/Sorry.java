@@ -154,7 +154,7 @@ public class Sorry extends JFrame implements Runnable {
                                 currentCardType.getP().move(currentCardType,numRows,numColumns);
                                 if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
                                 {
-                                    //changeTeam();
+                                    changeTeam();
                                     currentCardType=null;
                                 }
                                 MoveFinished=!MoveFinished;
@@ -381,7 +381,7 @@ public class Sorry extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             Tile.setBoard();
-            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_Board.jpg");
+            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardBlue.jpg");
             bgsound = new Sound("./Mariachi.wav");
             Card.resetDeck();
             setup();
@@ -392,7 +392,7 @@ public class Sorry extends JFrame implements Runnable {
         {
             bgsound = new Sound("./Mariachi.wav");
         }
-                    
+            
     }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -473,13 +473,25 @@ public class Sorry extends JFrame implements Runnable {
     public void changeTeam()
     {
         if(currentPlayer==Owner.Player1)
+        {
             currentPlayer=Owner.Player2;
+            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardYellow.jpg");
+        }
         else if(currentPlayer==Owner.Player2)
+        {
             currentPlayer=Owner.Player3;
+            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardGreen.jpg");
+        }
         else if(currentPlayer==Owner.Player3)
+        {
             currentPlayer=Owner.Player4;
+            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardRed.jpg");
+        }
         else if(currentPlayer==Owner.Player4)
+        {
             currentPlayer=Owner.Player1;
+            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardBlue.jpg");
+        }
     }
     public void finishMove()
     {
