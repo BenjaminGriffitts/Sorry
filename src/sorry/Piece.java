@@ -12,6 +12,7 @@ public class Piece {
     private Color c=null;
     private int howFar;
     private Image image;
+    private int spaceLeft;
     
     Piece(int _column,int _row, Sorry.Owner _team)
     {
@@ -116,6 +117,35 @@ public class Piece {
         return c;
     }
 
+    public int getColumn() {
+        return Column;
+    }
+
+    public int getRow() {
+        return Row;
+    }
+
+    public void setColumn(int Column) {
+        this.Column = Column;
+    }
+
+    public void setRow(int Row) {
+        this.Row = Row;
+    }
+
+    public int getHowFar() {
+        return howFar;
+    }
+
+    public int getSpaceLeft() {
+        return spaceLeft;
+    }
+
+    public void setSpaceLeft(int spaceLeft) {
+        this.spaceLeft = spaceLeft;
+    }
+    
+    
     public void setC(Color c) {
         if(c==Color.MAGENTA)
         {
@@ -213,6 +243,10 @@ public class Piece {
         
         howFarTillHome();
             
+    }
+    public void move(int nRows, int nCol, int distance)
+    {
+        moveDir(nRows, nCol, distance);
     }
     public void moveDir(int nRows, int nCol,int Distance)
     {

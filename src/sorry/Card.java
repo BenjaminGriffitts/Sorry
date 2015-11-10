@@ -49,10 +49,10 @@ public class Card {
         {
         card=Cards.get(0);
         Cards.remove(0);
-        if(card.type==4 || card.type==1 || card.type==5)
+        if(card.type==2 || card.type==7)
             break;
         }
-        
+//        
 //        Card card=Cards.get(0);
 //        Cards.remove(0);
 //            
@@ -126,7 +126,10 @@ public class Card {
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);
         g.setFont(new Font("Arial",Font.BOLD,30));
-        g.drawString(""+type, x+width/2-8, y+height/2+2);
+        if(type<13)
+            g.drawString(""+type, x+width/2-8, y+height/2+2);
+        else
+            g.drawString("Sorry", x+width/2-28, y+height/2+2);
         //When cardFunc is split and when a piece is selected you see the options
         if(cardFunc==specFunc.split && p!=null && !p.isInStart())
         {

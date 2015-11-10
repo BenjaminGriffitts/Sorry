@@ -80,14 +80,28 @@ public class Sorry extends JFrame implements Runnable {
                         
                         if(currentCardType.getCardFunc()==Card.specFunc.split && currentCardType.getP()!=null)
                         {
-                            if(!currentCardType.getP().checkCanMove(currentPlayer))
+                            if(currentCardType.getP().getSpaceLeft()==7)
+                            {
+                                if(Tile.getTile(row, column) instanceof TileHighlight)
+                                {
+                                    currentCardType.getP().move(numRows, numColumns, ((TileHighlight)Tile.getTile(row, column)).getDistance());
+                                    currentCardType.getP().setSpaceLeft( 7 - ((TileHighlight)Tile.getTile(row, column)).getDistance() );
+                                    setup();
+                                }
+                            }
+                            else if(currentCardType.getP().getSpaceLeft()<7 && p!=null)
+                            {
+                                currentCardType.getP().move(numRows, numColumns, currentCardType.getP().getSpaceLeft());
+                            }
+                            else if(!currentCardType.getP().checkCanMove(currentPlayer))
                             {
                                 finishMove();
                             }
                             else if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
                             {
                                 //need code
-                                
+                                TileHighlight.highlightTiles(currentCardType.getP());
+                                currentCardType.getP().setSpaceLeft(7);
                             }
                             else if(BoundingBox.isMouseIn("no", Card.option2[0], Card.option2[1], CardFont, g))
                             {
@@ -326,24 +340,23 @@ public class Sorry extends JFrame implements Runnable {
 //            g.drawLine(getX(0)+zi*getWidth2()/numColumns ,getY(0) ,
 //            getX(0)+zi*getWidth2()/numColumns,getY(getHeight2())  );
 //        }
-//        for(int i=0;i<numRows;i++)
-//            for(int i1=0;i1<numColumns;i1++)
-//            {
-//                if(Tile.getTile(i,i1) instanceof TileHome)
-//                {
-//                    if(((TileHome)Tile.getTile(i,i1)).getTeam()==Owner.Player3)
-//                        g.setColor(Color.red);
-//                    else
-//                        g.setColor(Color.MAGENTA);
-//                    g.fillRect(getX(0)+i1*(getWidth2()/numColumns), getY(0)+i*(getHeight2()/numRows), getWidth2()/numColumns, getHeight2()/numRows);
-//                }
-//            }
+        for(int i=0;i<numRows;i++)
+            for(int i1=0;i1<numColumns;i1++)
+            {
+                if(Tile.getTile(i,i1) instanceof TileHighlight)
+                {
+                    g.setStroke(new BasicStroke(3.0f));
+                    g.setColor(Color.MAGENTA);
+                    g.drawRect(getX(0)+i1*(getWidth2()/numColumns), getY(0)+i*(getHeight2()/numRows), getWidth2()/numColumns, getHeight2()/numRows);
+                }
+            }
         if(currentCardType!=null)
         {
             
             currentCardType.draw(g, getX(0)+6*getWidth2()/numColumns, getY(0)+4*getHeight2()/numRows,4*getWidth2()/numColumns,2*getHeight2()/numRows);
             
         }
+        g.setColor(Color.BLACK);
         g.drawRect(mouseX, mouseY, 2, 2);
         gOld.drawImage(image, 0, 0, null);
     }
@@ -470,6 +483,7 @@ public class Sorry extends JFrame implements Runnable {
             }
         }
     }
+    
     public void changeTeam()
     {
         if(currentPlayer==Owner.Player1)

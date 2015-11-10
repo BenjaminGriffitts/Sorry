@@ -34,7 +34,10 @@ public abstract class Tile {
             board[rows][columns]=new TileNormal();
         else if(type==1)
             board[rows][columns]=new TileSliders();
-        
+    }
+    public static void setTile(int rows, int columns, int type, int distance)
+    {
+        board[rows][columns]=new TileHighlight(distance);
     }
     public static void setTile(int rows,int columns, Sorry.Owner team, int d)
     {
