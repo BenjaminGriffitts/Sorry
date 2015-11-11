@@ -14,12 +14,14 @@ public class Card {
     private int type;
     private Piece p;
     boolean selectPiece;
+    Image cardImage;
     
     Card(int _type)
     {
         type=_type;
         resetFunc();
         selectPiece=false;
+        cardImage=Toolkit.getDefaultToolkit().getImage("./Card.png");
     }
     public static void resetDeck()
     {
@@ -117,14 +119,15 @@ public class Card {
     }
     
     public void draw(Graphics2D g,int x, int y, int width, int height) {
-        option1[0]=x+1;
+        option1[0]=x+5;
         option1[1]=y+height-7;
-        option2[0]=x+width-30;
+        option2[0]=x+width-35;
         option2[1]=y+height-7;
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
+//        g.fillRect(x, y, width, height);
+        g.drawImage(cardImage,x, y, width, height,Sorry.frame1);
         g.setColor(Color.BLACK);
-        g.drawRect(x, y, width, height);
+//        g.drawRect(x, y, width, height);
         g.setFont(new Font("Arial",Font.BOLD,30));
         if(type<13)
             g.drawString(""+type, x+width/2-8, y+height/2+2);

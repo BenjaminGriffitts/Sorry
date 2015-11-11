@@ -20,6 +20,12 @@ public class Sorry extends JFrame implements Runnable {
     Image image;
     Graphics2D g;
     Image sorryBoard;
+    Image sorryBoardBlue;
+    Image sorryBoardYellow;
+    Image sorryBoardGreen;
+    Image sorryBoardRed;
+    
+    Image deckOfCards;
 
     int numRows = Tile.getNumRows();
     int numColumns = Tile.getNumColumns();
@@ -316,9 +322,12 @@ public class Sorry extends JFrame implements Runnable {
             gOld.drawImage(image, 0, 0, null);
             return;
         }
-        
-        g.drawImage(sorryBoard,getX(0),getY(0),getWidth2(),getHeight2(),this);
 
+        g.drawImage(sorryBoard,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        boardCycle();
+
+        g.drawImage(deckOfCards,getX(0)+(getWidth2()/2)-125,getY(0)+(getHeight2()/2)-30,250,250,this);
+        
         g.setColor(Color.black);
         
         for(int i=0;i<Piece.numPieces();i++)
@@ -360,7 +369,56 @@ public class Sorry extends JFrame implements Runnable {
         g.drawRect(mouseX, mouseY, 2, 2);
         gOld.drawImage(image, 0, 0, null);
     }
-
+    /////////////////////////////////////////////////////////////////////////
+    public void boardCycle(){
+    
+        boardCycler2();
+        boardCycler1();
+    }
+/////////////////////////////////////////////////////////////////////////
+    public void boardCycler1(){
+    
+        
+        if(currentPlayer==Owner.Player1)
+        {
+            g.drawImage(sorryBoardBlue,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+        else if(currentPlayer==Owner.Player2)
+        {
+            g.drawImage(sorryBoardYellow,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+        else if(currentPlayer==Owner.Player3)
+        {
+            g.drawImage(sorryBoardGreen,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+        else
+        {
+            g.drawImage(sorryBoardRed,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+        
+        
+    }
+    /////////////////////////////////////////////////////////////////////////
+    public void boardCycler2(){
+    
+        
+        if(currentPlayer==Owner.Player1)
+        {
+            g.drawImage(sorryBoardRed,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+        else if(currentPlayer==Owner.Player2)
+        {
+            g.drawImage(sorryBoardBlue,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+        else if(currentPlayer==Owner.Player3)
+        {
+            g.drawImage(sorryBoardYellow,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+        else
+        {
+            g.drawImage(sorryBoardGreen,getX(0),getY(0),getWidth2(),getHeight2(),this);
+        }
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 // needed for     implement runnable
@@ -394,7 +452,12 @@ public class Sorry extends JFrame implements Runnable {
                 ysize = getSize().height;
             }
             Tile.setBoard();
-            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardBlue.jpg");
+            sorryBoard=Toolkit.getDefaultToolkit().getImage("./Sorry_Board.jpg");
+            sorryBoardBlue=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardBlue.jpg");
+            sorryBoardYellow=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardYellow.jpg");
+            sorryBoardGreen=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardGreen.jpg");
+            sorryBoardRed=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardRed.jpg");
+            deckOfCards=Toolkit.getDefaultToolkit().getImage("./Deck_of_Cards.png");
             bgsound = new Sound("./Mariachi.wav");
             Card.resetDeck();
             setup();
