@@ -13,8 +13,9 @@ public class Card {
     private specFunc cardFunc;
     private int type;
     private Piece p;
-    boolean selectPiece;
+    private boolean selectPiece;
     Image cardImage;
+    private int spaceLeft;
     
     Card(int _type)
     {
@@ -46,18 +47,18 @@ public class Card {
     public static Card TakeCard()
     {
 //Test specific cards with this code
-        Card card=null;
-        while(true)
-        {
-        card=Cards.get(0);
-        Cards.remove(0);
-        if(card.type==2 || card.type==7)
-            break;
-        }
-//        
-//        Card card=Cards.get(0);
+//        Card card=null;
+//        while(true)
+//        {
+//        card=Cards.get(0);
 //        Cards.remove(0);
-//            
+//        if(card.type==2 || card.type==7)
+//            break;
+//        }
+//        
+        Card card=Cards.get(0);
+        Cards.remove(0);
+            
         return(card);
     }
 
@@ -117,6 +118,13 @@ public class Card {
     public void setP(Piece p) {
         this.p = p;
     }
+    public int getSpaceLeft() {
+        return spaceLeft;
+    }
+
+    public void setSpaceLeft(int spaceLeft) {
+        this.spaceLeft = spaceLeft;
+    }
     
     public void draw(Graphics2D g,int x, int y, int width, int height) {
         option1[0]=x+5;
@@ -134,7 +142,7 @@ public class Card {
         else
             g.drawString("Sorry", x+width/2-28, y+height/2+2);
         //When cardFunc is split and when a piece is selected you see the options
-        if(cardFunc==specFunc.split && p!=null && !p.isInStart())
+        if(cardFunc==specFunc.split && p!=null && !p.isInStart() && spaceLeft==0 && !selectPiece)
         {
             g.drawString("Split?", (x+width/4)+6, y+height-7);
             g.setFont(Sorry.CardFont);

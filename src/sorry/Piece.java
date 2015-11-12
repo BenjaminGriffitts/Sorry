@@ -12,7 +12,6 @@ public class Piece {
     private Color c=null;
     private int howFar;
     private Image image;
-    private int spaceLeft;
     
     Piece(int _column,int _row, Sorry.Owner _team)
     {
@@ -137,13 +136,7 @@ public class Piece {
         return howFar;
     }
 
-    public int getSpaceLeft() {
-        return spaceLeft;
-    }
-
-    public void setSpaceLeft(int spaceLeft) {
-        this.spaceLeft = spaceLeft;
-    }
+    
     
     
     public void setC(Color c) {

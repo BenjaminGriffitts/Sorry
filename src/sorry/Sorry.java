@@ -86,36 +86,40 @@ public class Sorry extends JFrame implements Runnable {
                         
                         if(currentCardType.getCardFunc()==Card.specFunc.split && currentCardType.getP()!=null)
                         {
-                            if(currentCardType.getP().getSpaceLeft()==7)
-                            {
-                                if(Tile.getTile(row, column) instanceof TileHighlight)
-                                {
-                                    currentCardType.getP().move(numRows, numColumns, ((TileHighlight)Tile.getTile(row, column)).getDistance());
-                                    currentCardType.getP().setSpaceLeft( 7 - ((TileHighlight)Tile.getTile(row, column)).getDistance() );
-                                    setup();
-                                }
-                            }
-                            else if(currentCardType.getP().getSpaceLeft()<7 && p!=null)
-                            {
-                                currentCardType.getP().move(numRows, numColumns, currentCardType.getP().getSpaceLeft());
-                            }
-                            else if(!currentCardType.getP().checkCanMove(currentPlayer))
-                            {
-                                finishMove();
-                            }
-                            else if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g))
+                            if(BoundingBox.isMouseIn("yes", Card.option1[0], Card.option1[1], CardFont, g) && currentCardType.getSpaceLeft()==0 && !currentCardType.getSelectPiece())
                             {
                                 //need code
+                                
                                 TileHighlight.highlightTiles(currentCardType.getP());
-                                currentCardType.getP().setSpaceLeft(7);
+                                currentCardType.setSpaceLeft(7);
                             }
-                            else if(BoundingBox.isMouseIn("no", Card.option2[0], Card.option2[1], CardFont, g))
+                            else if(BoundingBox.isMouseIn("no", Card.option2[0], Card.option2[1], CardFont, g) && currentCardType.getSpaceLeft()==0&& !currentCardType.getSelectPiece())
                             {
                                 //sets card to none so that it can use move(), then sets card to null and resets cards color
                                 currentCardType.setFunc(Card.specFunc.none);
                                 currentCardType.getP().move(currentCardType,numRows,numColumns);
                                 finishMove();
                             }
+                            else if(currentCardType.getSpaceLeft()==7 && !currentCardType.getSelectPiece())
+                            {
+                                if(Tile.getTile(row, column) instanceof TileHighlight)
+                                {
+                                    currentCardType.getP().move(numRows, numColumns, ((TileHighlight)Tile.getTile(row, column)).getDistance());
+                                    currentCardType.setSpaceLeft( 7 - ((TileHighlight)Tile.getTile(row, column)).getDistance() );
+                                    setup();
+                                    currentCardType.setSelectPiece(true);
+                                }
+                            }
+                            else if(currentCardType.getSpaceLeft()<7 && p!=null && currentCardType.getSpaceLeft()!=0 && currentCardType.getSelectPiece())
+                            {
+                                currentCardType.getP().move(numRows, numColumns, currentCardType.getSpaceLeft());
+                                finishMove();
+                            }
+                            else if(!currentCardType.getP().checkCanMove(currentPlayer))
+                            {
+                                finishMove();
+                            }
+                            
                         }
                         else if(currentCardType.getCardFunc()==Card.specFunc.swap && currentCardType.getP()!=null && !Piece.safety(currentCardType.getP()))
                         {
@@ -195,7 +199,7 @@ public class Sorry extends JFrame implements Runnable {
                                     finishMove();
                                 }
                             }
-                            else
+                            else if(currentCardType.getCardFunc()==Card.specFunc.sorry)
                             {
                                 if(tempPiece!=null && !tempPiece.isInStart() && currentCardType.getP().isInStart() && !Piece.safety(tempPiece) &&
                                         !Piece.safety(currentCardType.getP()))
