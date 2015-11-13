@@ -34,6 +34,8 @@ public abstract class Tile {
             board[rows][columns]=new TileNormal();
         else if(type==1)
             board[rows][columns]=new TileSliders();
+        else if(type==4)
+            board[rows][columns]=new TileTeleporter();
     }
     public static void setTile(int rows, int columns, int type, int distance)
     {

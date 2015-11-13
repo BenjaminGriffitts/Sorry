@@ -471,4 +471,19 @@ public class Piece {
     {
         Pieces.clear();
     }
+    static public boolean checkWin(Sorry.Owner team)
+    {
+        int pIH=0;
+        for(Piece p:Pieces)
+        {
+            if(p.team==team && Tile.getTile(p.Row, p.Column)instanceof TileHome && ((TileHome)Tile.getTile(p.Row, p.Column)).getDistanceFromEnd()==0)
+            {
+                pIH++;
+            }
+        }
+        if(pIH==4)
+            return(true);
+        
+        return(false);
+    }
 }

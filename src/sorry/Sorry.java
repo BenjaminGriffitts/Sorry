@@ -38,6 +38,8 @@ public class Sorry extends JFrame implements Runnable {
     int numColumns = Tile.getNumColumns();
     
     public enum Owner{Player1, Player2, Player3, Player4};
+    public enum WinState{none,p1,p2,p3,p4};
+    WinState winner;
     boolean MoveFinished; //if true next click is drawing a card
     Card currentCardType;
     Owner currentPlayer;
@@ -90,7 +92,7 @@ public class Sorry extends JFrame implements Runnable {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
                     
-                    if(pause)
+                    if(pause || winner!=WinState.none)
                         return;
                         
                     int xpos= e.getX()-getX(0);
@@ -207,7 +209,7 @@ public class Sorry extends JFrame implements Runnable {
                                 currentCardType.getP().move(currentCardType,numRows,numColumns);
                                 if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
                                 {
-                                    //changeTeam();
+                                    changeTeam();
                                     currentCardType=null;
                                 }
                                 MoveFinished=!MoveFinished;
@@ -343,7 +345,7 @@ public class Sorry extends JFrame implements Runnable {
         }
 
 //fill background
-        g.setColor(Color.cyan);
+        g.setColor(Color.black);
 
         g.fillRect(0, 0, xsize, ysize);
 
@@ -480,6 +482,7 @@ public class Sorry extends JFrame implements Runnable {
         setupPiece();
         Piece.resetColors();
         pause=false;
+        winner = WinState.none;
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -565,6 +568,11 @@ public class Sorry extends JFrame implements Runnable {
                     Tile.setTile(HomeRow[i]-(i1*1), HomeCol[i], Owner.Player4,6-i1);
             }
         }
+        Tile.setTile(0,0,4);
+        Tile.setTile(0,numColumns-1,4);
+        Tile.setTile(numRows-1,0,4);
+        Tile.setTile(numRows-1,numColumns-1,4);
+        
         
     }
     public void setupPiece()
@@ -613,8 +621,24 @@ public class Sorry extends JFrame implements Runnable {
     {
         currentCardType=null;
         MoveFinished=!MoveFinished;
-        //changeTeam();
+        if(Piece.checkWin(currentPlayer))
+        {
+            whoWon();
+        }
+        
+        changeTeam();
         Piece.resetColors();
+    }
+    public void whoWon()
+    {
+        if(currentPlayer==Owner.Player1)
+            winner=WinState.p1;
+        else if(currentPlayer==Owner.Player2)
+            winner=WinState.p2;
+        else if(currentPlayer==Owner.Player3)
+            winner=WinState.p3;
+        else
+            winner=WinState.p4;
     }
 /////////////////////////////////////////////////////////////////////////
     public int getX(int x) {
