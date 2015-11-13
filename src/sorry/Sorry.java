@@ -35,6 +35,8 @@ public class Sorry extends JFrame implements Runnable {
     Card currentCardType;
     Owner currentPlayer;
     
+    static boolean pause;
+    
     static Font CardFont = new Font("Arial",Font.BOLD,20);
     Piece selectedP=null;
     
@@ -44,6 +46,11 @@ public class Sorry extends JFrame implements Runnable {
     int HomeRow[]={numRows-3,0,2           ,numRows-1};
     int HomeCol[]={0        ,2,numColumns-1,numColumns-3};
     static Menu gui=new Menu();
+    static Instructions inst=new Instructions();
+    static MoveInst move=new MoveInst();
+    static CardsInst card=new CardsInst();
+    static HowToWinInst win=new HowToWinInst();
+    static Pause paused=new Pause();
     static boolean GameStart=false;
     static int mouseX=0;
     static int mouseY=0;
@@ -57,6 +64,16 @@ public class Sorry extends JFrame implements Runnable {
         frame1.setLocationRelativeTo(null);
         gui.setLocationRelativeTo(null);
         gui.setVisible(true);
+        inst.setVisible(false);
+        inst.setLocationRelativeTo(null);
+        move.setVisible(false);
+        move.setLocationRelativeTo(null);
+        card.setVisible(false);
+        card.setLocationRelativeTo(null);
+        win.setVisible(false);
+        win.setLocationRelativeTo(null);
+        paused.setVisible(false);
+        paused.setLocationRelativeTo(null);
     }
 
     public Sorry() {
@@ -64,6 +81,10 @@ public class Sorry extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
+                    
+                    if(pause)
+                        return;
+                        
                     int xpos= e.getX()-getX(0);
                     int ypos= e.getY()-getY(0);
                     
@@ -278,6 +299,11 @@ public class Sorry extends JFrame implements Runnable {
                 {
                     reset();
                 }
+                if (e.VK_ESCAPE == e.getKeyCode())
+                {
+                    pause=true;
+                    paused.setVisible(true);
+                }
 
                 repaint();
             }
@@ -445,6 +471,7 @@ public class Sorry extends JFrame implements Runnable {
         currentCardType=null;
         setupPiece();
         Piece.resetColors();
+        pause=false;
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
