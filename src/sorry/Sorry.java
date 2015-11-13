@@ -1,5 +1,12 @@
 package sorry;
 
+import Menu.CardsInst;
+import Menu.Menu;
+import Menu.Instructions;
+import Menu.HowToWinInst;
+import Menu.MoveInst;
+import Menu.Pause;
+import Menu.*;
 import Tile.*;
 import java.io.*;
 import java.awt.*;
@@ -35,6 +42,8 @@ public class Sorry extends JFrame implements Runnable {
     Card currentCardType;
     Owner currentPlayer;
     
+    public static boolean pause;
+    
     static Font CardFont = new Font("Arial",Font.BOLD,20);
     Piece selectedP=null;
     
@@ -43,13 +52,18 @@ public class Sorry extends JFrame implements Runnable {
     int SlidersCol[]={1,9,numColumns-1,numColumns-1,numColumns-2,6        ,0,0};
     int HomeRow[]={numRows-3,0,2           ,numRows-1};
     int HomeCol[]={0        ,2,numColumns-1,numColumns-3};
-    static Menu gui=new Menu();
-    static boolean GameStart=false;
+    public static Menu gui=new Menu();
+    public static Instructions inst=new Instructions();
+    public static MoveInst move=new MoveInst();
+    public static CardsInst card=new CardsInst();
+    public static HowToWinInst win=new HowToWinInst();
+    public static Pause paused=new Pause();
+    public static boolean GameStart=false;
     static int mouseX=0;
     static int mouseY=0;
     Sound bgsound=null;
 
-    static Sorry frame1;
+    public static Sorry frame1;
     public static void main(String[] args) {
         frame1 = new Sorry();
         frame1.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -57,6 +71,16 @@ public class Sorry extends JFrame implements Runnable {
         frame1.setLocationRelativeTo(null);
         gui.setLocationRelativeTo(null);
         gui.setVisible(true);
+        inst.setVisible(false);
+        inst.setLocationRelativeTo(null);
+        move.setVisible(false);
+        move.setLocationRelativeTo(null);
+        card.setVisible(false);
+        card.setLocationRelativeTo(null);
+        win.setVisible(false);
+        win.setLocationRelativeTo(null);
+        paused.setVisible(false);
+        paused.setLocationRelativeTo(null);
     }
 
     public Sorry() {
@@ -64,6 +88,10 @@ public class Sorry extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
+                    
+                    if(pause)
+                        return;
+                        
                     int xpos= e.getX()-getX(0);
                     int ypos= e.getY()-getY(0);
                     
@@ -178,7 +206,7 @@ public class Sorry extends JFrame implements Runnable {
                                 currentCardType.getP().move(currentCardType,numRows,numColumns);
                                 if(currentCardType.getCardFunc()!=Card.specFunc.drawAgain)
                                 {
-                                    changeTeam();
+                                    //changeTeam();
                                     currentCardType=null;
                                 }
                                 MoveFinished=!MoveFinished;
@@ -277,6 +305,11 @@ public class Sorry extends JFrame implements Runnable {
                 if (e.VK_E == e.getKeyCode())
                 {
                     reset();
+                }
+                if (e.VK_ESCAPE == e.getKeyCode())
+                {
+                    pause=true;
+                    paused.setVisible(true);
                 }
 
                 repaint();
@@ -445,6 +478,7 @@ public class Sorry extends JFrame implements Runnable {
         currentCardType=null;
         setupPiece();
         Piece.resetColors();
+        pause=false;
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -578,7 +612,7 @@ public class Sorry extends JFrame implements Runnable {
     {
         currentCardType=null;
         MoveFinished=!MoveFinished;
-        changeTeam();
+        //changeTeam();
         Piece.resetColors();
     }
 /////////////////////////////////////////////////////////////////////////

@@ -289,27 +289,30 @@ public class Piece {
         }
         else if(Distance<0)
         {
-            if(Tile.getTile(Row, Column) instanceof TileHome && team==((TileHome)Tile.getTile(Row, Column)).getTeam() && ((TileHome)Tile.getTile(Row, Column)).getDistanceFromEnd()<6)
+            for(int i=0; i>Distance; i--)
+            {
+                if(Tile.getTile(Row, Column) instanceof TileHome && team==((TileHome)Tile.getTile(Row, Column)).getTeam() && ((TileHome)Tile.getTile(Row, Column)).getDistanceFromEnd()<6)
                 {
+
                     if(team==Sorry.Owner.Player1)
-                    {
-                        Column+=1;
-                    }
-                    else if(team==Sorry.Owner.Player2)
-                    {
-                        Row+=1;
-                    }
-                    else if(team==Sorry.Owner.Player3)
                     {
                         Column-=1;
                     }
-                    else if(team==Sorry.Owner.Player4)
+                    else if(team==Sorry.Owner.Player2)
                     {
                         Row-=1;
                     }
+                    else if(team==Sorry.Owner.Player3)
+                    {
+                        Column+=1;
+                    }
+                    else if(team==Sorry.Owner.Player4)
+                    {
+                        Row+=1;
+                    }
+
                 }
-            else
-                for(int i=0; i>Distance; i--)
+                else
                 {
                     if(Row==0 && Column>0)
                     {
@@ -328,6 +331,7 @@ public class Piece {
                         Row+=1;
                     }
                 }
+            }
         }
     }
     public static void swapPieces(Piece piece1,Piece piece2)
