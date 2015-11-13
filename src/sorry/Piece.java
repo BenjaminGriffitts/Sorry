@@ -226,7 +226,7 @@ public class Piece {
             p.howFarTillHome();
         }
         
-        if(Tile.getTile(Row,Column) instanceof TileSliders && howFar>6)
+        if(Tile.getTile(Row,Column) instanceof TileSliders && howFar>6 && c.getType()!=4)
         {
             if(Row==6 || Column==6 || Row==9 || Column==9)
                 moveDir(nRows,nCol,4);
