@@ -42,7 +42,11 @@ public class Sorry extends JFrame implements Runnable {
     Card currentCardType;
     Owner currentPlayer;
     
+<<<<<<< HEAD
     public static boolean pause;
+=======
+    static boolean pause;
+>>>>>>> origin/master
     
     static Font CardFont = new Font("Arial",Font.BOLD,20);
     Piece selectedP=null;
@@ -52,6 +56,7 @@ public class Sorry extends JFrame implements Runnable {
     int SlidersCol[]={1,9,numColumns-1,numColumns-1,numColumns-2,6        ,0,0};
     int HomeRow[]={numRows-3,0,2           ,numRows-1};
     int HomeCol[]={0        ,2,numColumns-1,numColumns-3};
+<<<<<<< HEAD
     public static Menu gui=new Menu();
     public static Instructions inst=new Instructions();
     public static MoveInst move=new MoveInst();
@@ -59,6 +64,15 @@ public class Sorry extends JFrame implements Runnable {
     public static HowToWinInst win=new HowToWinInst();
     public static Pause paused=new Pause();
     public static boolean GameStart=false;
+=======
+    static Menu gui=new Menu();
+    static Instructions inst=new Instructions();
+    static MoveInst move=new MoveInst();
+    static CardsInst card=new CardsInst();
+    static HowToWinInst win=new HowToWinInst();
+    static Pause paused=new Pause();
+    static boolean GameStart=false;
+>>>>>>> origin/master
     static int mouseX=0;
     static int mouseY=0;
     Sound bgsound=null;
