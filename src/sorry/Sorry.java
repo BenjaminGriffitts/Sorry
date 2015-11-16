@@ -33,6 +33,8 @@ public class Sorry extends JFrame implements Runnable {
     Image sorryBoardRed;
     
     Image deckOfCards;
+    
+    int sorryCount;
 
     int numRows = Tile.getNumRows();
     int numColumns = Tile.getNumColumns();
@@ -65,6 +67,7 @@ public class Sorry extends JFrame implements Runnable {
     static int mouseX=0;
     static int mouseY=0;
     Sound bgsound=null;
+    Sound sorry=null;
 
     public static Sorry frame1;
     public static void main(String[] args) {
@@ -232,11 +235,13 @@ public class Sorry extends JFrame implements Runnable {
                             }
                             else if(currentCardType.getCardFunc()==Card.specFunc.sorry)
                             {
+                                sorryCount++;
                                 if(tempPiece!=null && !tempPiece.isInStart() && currentCardType.getP().isInStart() && !Piece.safety(tempPiece) &&
                                         !Piece.safety(currentCardType.getP()))
                                 {
                                     Piece.Sorry(currentCardType.getP(),tempPiece);
                                     finishMove();
+                                    sorryCount=0;
                                 }
                             }
                         }
@@ -483,6 +488,7 @@ public class Sorry extends JFrame implements Runnable {
         Piece.resetColors();
         pause=false;
         winner = WinState.none;
+        sorryCount=0;
     }
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
@@ -501,6 +507,7 @@ public class Sorry extends JFrame implements Runnable {
             sorryBoardRed=Toolkit.getDefaultToolkit().getImage("./Sorry_BoardRed.jpg");
             deckOfCards=Toolkit.getDefaultToolkit().getImage("./Deck_of_Cards.png");
             bgsound = new Sound("./Mariachi.wav");
+            sorry = new Sound("./im_sorry.wav");
             Card.resetDeck();
             setup();
             setupPiece();
@@ -509,6 +516,14 @@ public class Sorry extends JFrame implements Runnable {
         if (bgsound.donePlaying)
         {
             bgsound = new Sound("./Mariachi.wav");
+        }
+        if(currentCardType!=null && currentCardType.getCardFunc()==Card.specFunc.sorry)
+        {
+            if(sorryCount==0)
+            {
+                sorry = new Sound("im_sorry.wav");
+                sorryCount++;
+            }
         }
             
     }
